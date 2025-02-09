@@ -1,0 +1,99 @@
+.home-h-icon-small {
+    background-image: url("/assets/site_images/loogleicon-07.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    margin-left: 20px;
+    margin-right: 10px;
+}
+
+.home-h-icon-medium {
+    background-image: url("/assets/site_images/loogleicon-07.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-left: 5px;
+}
+
+.profile-h-icon-medium {
+    background-image: url("/assets/site_images/loogleicon-08.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-left: 5px;
+}
+
+.people-h-icon-medium {
+    background-image: url("/assets/site_images/loogleicon-10.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-left: 5px;
+}
+
+.photos-h-icon-medium {
+    background-image: url("/assets/site_images/loogleicon-09.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-left: 5px;
+}
+
+.wh-h-icon-medium {
+    background-image: url("/assets/site_images/loogleicon-11.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-left: 5px;
+}
+
+.com-h-icon-medium {
+    background-image: url("/assets/site_images/loogleicon-12.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-left: 5px;
+}
+
+.events-h-icon-medium {
+    background-image: url("/assets/site_images/loogleicon-13.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-left: 5px;
+}
+
+.settings-h-icon-medium {
+    background-image: url("/assets/site_images/loogleicon-14.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 22px;
+    height: 22px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-left: 5px;
+    margin-top: 5px;
+}

@@ -1,0 +1,234 @@
+body {
+    background: #e5e5e5;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start; 
+    padding: 0 10px; 
+    margin: 0 auto; 
+    max-width: 2000px; 
+    width: 100%; 
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center; 
+}
+
+.col-md-4,
+.col-sm-6,
+.col-xs-12 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    margin: 10px; 
+    width: 100%; 
+}
+
+@media (max-width: 575px) {
+    .col-xs-12 {
+        width: 100%; 
+    }
+}
+
+@media (min-width: 576px) and (max-width: 767px) {
+    .col-sm-6 {
+        width: 500px; 
+    }
+}
+
+@media (min-width: 768px) {
+    .col-md-4 {
+        width: 500px; 
+    }
+}
+
+.post, .post-create {
+    border-radius: 2px;
+    box-shadow: 0 1px 3px 1px #00000017;
+}
+
+.post-card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #d0d0d0;
+    margin: 10px;
+    background: #fff;
+    min-height: 250px; 
+    height: auto;  
+    box-sizing: border-box;
+    width: 500px; 
+}
+
+.write-post-card, .post-card {
+    background: #fff;
+    padding: 15px;
+    border: 1px solid #ddd;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    top: 25px;
+    position: relative;
+    width: 500px; 
+    min-height: 250px; 
+}
+
+.write-post-expanded {
+    display: none;
+    background: #fff;
+    margin: 20px 0;
+    border: 1px solid #ddd;
+    border: 1px solid rgba(10, 10, 10, 0.1);
+    margin: 40px auto 0px;
+    box-shadow: rgb(0, 0, 0) 3px 0px 33px 0px;
+    margin-bottom: 75px;
+    width: 650px;
+    height: 300px;
+    background: rgb(246, 246, 246);
+}
+
+.yap-here {
+    height: 100px;
+    width: 480px;
+    background: #fff;
+    resize: none;
+    position: relative;
+    border: 1px solid rgba(10, 10, 10, 0.1);
+    z-index: 2;
+    margin-left: 20px;
+    text-indent: 2ch;
+    background: #fff;
+    overflow: auto;
+    padding-top: 3px;
+    font-size: 16;
+    z-index: 2;
+}
+
+#cancel-post {
+    margin-right: 10px;
+    padding: 0px 20px;
+    cursor: pointer;
+    border: 1px solid rgba(10, 10, 10, 0.1);
+    height: 33px;
+    border-radius: 2px;
+    text-align: center;
+    top: 8px;
+    position: relative;
+    left: 20px;
+}
+
+#submit-post {
+    margin-right: 10px;
+    padding: 0px 20px;
+    cursor: pointer;
+    border: 1px solid rgba(10, 10, 10, 0.1);
+    height: 33px;
+    border-radius: 2px;
+    text-align: center;
+    top: 8px;
+    position: relative;
+    left: 20px;
+    background: #55a644;
+}
+
+.yap-here:focus {
+    outline: none; 
+}
+
+#triangle {
+    transform: rotate(45deg); 
+    width: 28px; 
+    height: 28px; 
+    z-index: 1; 
+    border-bottom: 1px solid #d8d8d8;
+    border-right: 1px solid #d8d8d8;
+    background-color: #fff;
+    display: block;
+    position: absolute;
+    top: 195px;
+    margin-left: 14px;
+}
+
+.write-post-footer {
+    background: #fff;
+    display: flex;
+    height: 50px;
+    position: relative;
+    margin-top: 118px;
+  }
+
+.write-post-stuff {
+    display: flex;
+    padding: 15px;
+}
+
+.profile-pic-h5n1 {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.post-body {
+    margin: 5px 0;
+    font-size: 16px;
+    margin-left: 3%;
+    color: #404040;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.profile-pic-index {
+    height: 50px;
+    width: 50px;
+    border-radius: 100px;
+    margin-right: 15px;
+}
+
+.post-header-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.profile-pic-index {
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 1% 0 0 0;
+
+}
+
+.profile-line1 {
+    font-weight: bold;
+    font-size: 16px;
+    margin: 0;
+    font-size: inherit;
+    color: #262626;
+}
+
+.profile-line2 {
+    font-size: 14px;
+    color: #999;
+}
+
+.write-post-card   {
+    width: 500px; 
+    height: 225px; 
+    vertical-align: top;
+}
+

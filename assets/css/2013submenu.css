@@ -1,0 +1,223 @@
+.submenu-container {
+    margin-top: 10px;
+    background-color: #f8f8f8;
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    height: 40px;
+    display: flex;
+}
+
+.nav-tabs {
+    display: flex;
+    justify-content: center;
+    border: none;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0;
+}
+
+.nav-tabs > li {
+    position: relative;
+    display: inline-block;
+    margin: 0 15px;
+}
+
+.nav-tabs > li > a {
+    display: block;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: center;
+}
+
+.sub-header .nav-tabs > li.active > a {
+    background: none;
+    border: none;
+      border-bottom-width: medium;
+      border-bottom-style: none;
+      border-bottom-color: currentcolor;
+    border-bottom: 3px solid #007bff;
+    color: #007bff;
+}
+
+.sub-header .nav-tabs > li > a {
+    border: none;
+    border-radius: 0;
+    padding: 10px 15px;
+    color: #000;
+}
+
+.nav-tabs .dropdown {
+    position: relative;
+}
+
+.nav-tabs .dropdown-toggle {
+    padding: 8px 15px;
+    color: #333;
+    text-decoration: none;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.nav-tabs .dropdown-toggle .caret {
+    margin-left: 5px;
+}
+
+.nav-tabs .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 160px;
+    padding: 5px 0;
+    background-color: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.175);
+    border-radius: 4px;
+    z-index: 1000;
+}
+
+.nav-tabs .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.nav-tabs .dropdown-menu > li > a {
+    padding: 8px 20px;
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    text-align: left;
+}
+
+.nav-tabs .dropdown-menu > li > a:hover {
+    background-color: #f1f1f1;
+    color: #007bff;
+}
+
+.nav-tabs .dropdown-menu .caret {
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    margin-left: -5px;
+}
+
+#submenu-nav {
+    height: 40px;
+    border: none;
+    bottom: 10;
+    position: relative;
+}
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+    color: #555555;
+    font-weight: bold;
+    cursor: default;
+    background-color: transparent;
+    border: none;
+    border-bottom: 3px solid #007bff;
+    padding-bottom: 8px;
+    border-radius: 0px;
+}
+
+.home-icon-container {
+    display: inline-flex; 
+    align-items: center; 
+    vertical-align: middle;
+    margin-right: 15px;
+    cursor: pointer;
+}
+
+.home-icon {
+    font-size: 13px;
+    margin-top: 3px;
+    margin-right: 5px;
+    color: #939393;
+}
+
+.arrow-icon {
+    color: black;
+    font-size: 13px;
+    margin-top: 3px;
+    margin-left: 5px;
+}
+
+.submenu-container {
+    position: relative;
+}
+
+.home-icon-container {
+    cursor: pointer;
+}
+
+.sidebar-container {
+    position: fixed;
+    transition: transform 0.3s ease-in-out;
+    top: 70px;
+    width: 250px;
+    height: 1250px;
+    background: #fff;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    border: 0.25px solid #d0d0d0;
+    border-top: 0px solid #d0d0d0;
+    border-left: 0px solid #d0d0d0;
+    transform: translateX(-250px);
+}
+
+.sidebar-container.open {
+    transform: translateX(0px); 
+    transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-menu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-menu li {
+    margin: 10px 0;
+}
+
+.sidebar-menu li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
+
+.sidebar-menu li a:hover {
+    color: #007bff;
+}
+
+#sel {
+    color: black;
+}
+
+.icon {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    height: 3.5em;
+}
+
+#sel p {
+    position: relative;
+    top: 8px;
+    color: #797b7b;
+}
+
+.sidebar-list {
+    display: contents;
+}
+
+#sel:hover {
+    background-color: #f7f7f7;
+}
+
