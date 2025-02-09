@@ -151,7 +151,7 @@ body {
     background-color: #fff;
     display: block;
     position: absolute;
-    top: 195px;
+    margin-top: -10vh;
     margin-left: 14px;
 }
 

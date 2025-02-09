@@ -35,6 +35,7 @@ $(document).ready(function () {
         });
     });
 });
+
 $(document).ready(function () {
 
     const protocol = window.location.protocol === 'https:' ? 'https://' : 'http://';
@@ -48,8 +49,6 @@ $(document).ready(function () {
     const pageSize = 15;  
     let isLoading = false;  
     let hasMorePosts = true;  
-
-    fetchPosts(currentPage);
 
     function fetchPosts(page) {
 
@@ -67,7 +66,12 @@ $(document).ready(function () {
                 console.log('API Response:', response);  
 
                 if (response.status === 'success') {
-                    const posts = response.data.posts;
+                    let posts = response.data.posts;
+
+                    // Sort posts by created_at in descending order
+                    posts = posts.sort(function(a, b) {
+                        return new Date(b.created_at) - new Date(a.created_at);
+                    });
 
                     posts.forEach(function(post) {
                         const date = new Date(post.created_at);
@@ -82,7 +86,6 @@ $(document).ready(function () {
 
                         console.log('Formatted Date:', formattedDate); 
 
-                    
                         const postHtml = `
                         <div class="col-md-4 col-sm-6 col-xs-12">
                             <div class="post-card">
@@ -140,10 +143,11 @@ $(document).ready(function () {
         });
 
         if (nearBottom) {
-            fetchPosts(currentPage++);  
             console.log('Near the bottom, fetching more posts...');
-
+            fetchPosts(currentPage);  
+            currentPage++;  
         }
+        
     }
 
 });

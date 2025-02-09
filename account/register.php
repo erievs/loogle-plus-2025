@@ -2010,11 +2010,12 @@ include '../important/config.php';
 
             
             <div class="form-element" id="password-form-element">
-                <label id="password-label">
-                    <strong>Create a password</strong>
-                    <input type="password" name="password" id="Passwd" required>
-                </label>
+              <label id="password-label">
+                  <strong>Create a password</strong>
+                  <input type="password" name="password" id="Passwd" required pattern="[A-Za-z0-9]+" title="Password can only contain letters and numbers">
+              </label>
             </div>
+
             
             <?php if (REQUIRE_CODE_FOR_REGISTRATION): ?>
                 <div class="form-element" id="registration-code-form-element">
@@ -2023,7 +2024,7 @@ include '../important/config.php';
                         <input type="text" name="registration_code" id="RegistrationCode" required style="margin-bottom: 10px;">
                         <p class="instructions">
                             Need a code? Contact <a href="mailto:erievalleysoftware@gmail.com">erievalleysoftware@gmail.com</a> or join the 
-                            <a href="https://discord.gg/BhV3zVXV" target="_blank">Discord Server</a> and DM an Admin (NCP3.0 is the owner).
+                            <a href="https://discord.gg/ecvmxZMQf8" target="_blank">Discord Server</a> and DM an Admin (NCP3.0 is the owner).
                         </p>
                     </label>
                 </div>

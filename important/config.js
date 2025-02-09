@@ -13,10 +13,10 @@ async function loadConfig() {
             siteUrl: siteUrl,  
             timezone: 'America/New_York',  
             database: {
-                host: '',
-                name: '',
-                user: '',
-                password: ''
+                host: 'localhost',
+                name: 'loogle_plus',
+                user: 'root',
+                password: 'nicknick'
             }
         };
 

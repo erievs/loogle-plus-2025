@@ -27,16 +27,22 @@ class PostAPI
         : 15;  
         $showAll = isset($params['show_all']) && $params['show_all'] === 'true';
         $searchQuery = isset($params['search']) ? $params['search'] : '';
-
+    
         if ($showAll) {
             $page = 1;
             $pageSize = PHP_INT_MAX;
         }
-
+    
         $offset = ($page - 1) * $pageSize;
-
+    
         try {
 
+            $pagination = $this->getPagination($page, $pageSize, $searchQuery, $community);
+
+            if ($pagination['current_page'] > $pagination['total_pages']) {
+                return $this->response('error', 'Already at the highest page', []);
+            }
+    
             $sql = "SELECT * FROM posts";
             $queryParams = [];
             
@@ -55,14 +61,14 @@ class PostAPI
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute($queryParams);
             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+    
             if (empty($posts) && $searchQuery) {
-
+    
                 $posts = [
                     [
                         'id' => 0,
                         'content' => 'No Results found, 1984',
-                        'createdssssat' => date('1984'),
+                        'created_at' => date('1984'),
                         'community' => 'internal',
                         'user_id' => 0, 
                         'username' => 'Big Brother', 
@@ -70,26 +76,26 @@ class PostAPI
                     ]
                 ];
             } else {
-
+    
                 foreach ($posts as &$post) {
                     $postId = $post['id'];
                     $commentStmt = $this->pdo->prepare("SELECT * FROM comments WHERE post_id = :post_id ORDER BY created_at DESC");
                     $commentStmt->execute(['post_id' => $postId]);
                     $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
-
+    
                     $post['comments'] = $comments;
                 }
             }
-
+    
             return $this->response('success', 'Posts fetched successfully', [
                 'posts' => $posts,
-                'pagination' => $this->getPagination($page, $pageSize, $searchQuery, $community)
+                'pagination' => $pagination
             ]);
         } catch (PDOException $e) {
             return $this->response('error', 'Database error: ' . $e->getMessage());
         }
     }
-
+    
     private function getPagination(int $page, int $pageSize, ?string $searchQuery, ?string $community): array
     {
         $sql = "SELECT COUNT(*) FROM posts";
