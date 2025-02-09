@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Loogle Plus Staging</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+            text-align: center;
+            padding-top: 10%;
+        }
+        .construction-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .icon {
+            font-size: 50px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        .logo {
+            display: block;
+            max-width: 100%;
+            max-height: 500px;
+            width: auto;
+            height: auto;
+            margin: 0 auto 20px;
+        }
+        .message {
+            font-size: 18px;
+            font-weight: bold;
+            color: #555;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            let images = [
+                "https://upload.wikimedia.org/wikipedia/commons/4/44/Reagan_Bush_%2784.svg",
+                "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Ingsoc_Oceania_flag_1984.svg/914px-Ingsoc_Oceania_flag_1984.svg.png",
+                "https://media.tenor.com/eoKGC_INNe8AAAAM/big-brother-big-brother-is-watching-you.gif"
+            ];
+            let index = Math.floor(Math.random() * images.length);
+            $(".logo").attr("src", images[index]);
+            setInterval(function() {
+                index = (index + 1) % images.length;
+                $(".logo").attr("src", images[index]);
+            }, 7500);
+        });
+    </script>
+</head>
+<body>
+    <div class="construction-container">
+        <img src="" alt="Loogle Plus Logo" class="logo">
+        <span class="glyphicon glyphicon-wrench icon"></span>
+        <p class="message">Loogle Plus Staging is currently down. Please check back later.</p>
+    </div>
+</body>
+</html>
