@@ -36,6 +36,8 @@ $(document).ready(function() {
         $('#posts-item').show();
     } else if (currentPage === 'search.php') {
         $('#everything-item').addClass('active').show();
+    } else if (currentPage === 'settings.php') {
+        $('#settings-item').addClass('active').show();
     } else {
 
         defaultPage();

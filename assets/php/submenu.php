@@ -43,6 +43,7 @@ if (!defined('DEPENDENCIES_INCLUDED')) {
         <li role="presentation" id="recommended-item"><a href="#">Recommended for you</a></li>
         <li role="presentation" id="your-communities-item"><a href="#">Your Communities</a></li>
         <li role="presentation" id="everything-item"><a href="#">Everything</a></li>
+        <li role="presentation" id="settings-item"><a href="#">Settings</a></li>
     </ul>
 
     <div class="sidebar-container" id="sidebar-container">
@@ -100,7 +101,7 @@ if (!defined('DEPENDENCIES_INCLUDED')) {
             </span>
 
             <span class="icon" id="sel">
-                <a class="sidebar-list" href="/">
+                <a class="sidebar-list" href="/settings.php">
                     <div class="settings-h-icon-medium"></div>
                     <p>Settings</p>
                 </a>

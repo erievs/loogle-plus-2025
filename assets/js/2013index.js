@@ -1,3 +1,34 @@
+
+// things for me when I am deving
+
+$(document).ready(function() {
+    var totalReplacements = 0; 
+
+    $('script').each(function() {
+        var scriptContent = $(this).html(); 
+        var checkForLetConst = /\b(let|const)\b/;
+
+        if (checkForLetConst.test(scriptContent)) {
+            console.warn('Warning: "let" or "const" found in an inline script. Replacing with "var".');
+
+            var replacementsInScript = (scriptContent.match(/\b(let|const)\b/g) || []).length;
+
+            totalReplacements += replacementsInScript;
+
+            var updatedScriptContent = scriptContent.replace(/\b(let|const)\b/g, 'var');
+
+            $(this).html(updatedScriptContent);
+        }
+    });
+
+    if (totalReplacements > 0) {
+        console.log(`Total replacements made: ${totalReplacements}`);
+    } else {
+        console.log("No 'let' or 'const' found to replace.");
+    }
+});
+
+
 $(document).ready(function () {
 
     $('#write-post-card').on('click', function () {
@@ -16,7 +47,26 @@ $(document).ready(function () {
 
         $('#write-post-expanded').fadeOut(function () {
 
-            var writePostCard = $('<div class="col-md-4 col-sm-6 col-xs-12"><div class="write-post-card" id="write-post-card"><p>Write something...</p></div></div>');
+            var writePostCard = $('<div class="col-md-4 col-sm-6 col-xs-12">' +
+                '<div class="write-post-card" id="write-post-card">' +
+                    '<textarea id="post-text-area">Share what\'s new...</textarea>' +
+                    '<div id="triangle-write" class="triangle-write"></div>' +
+                    '<div class="post-create-icons">' +
+                        '<div class="write-post-icon">' +
+                            '<div class="image-write"></div>' +
+                            '<br><br>' +
+                            '<span style="color: black; font-weight: bold;">Text</span>' +
+                        '</div>' +
+                        '<div class="write-post-icon">' +
+                            '<div class="image-photo"></div>' +
+                            '<br><br>' +
+                            '<span>Photos</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
+            '</div>');            
+            
+            
             $('.row').prepend(writePostCard); 
 
             writePostCard.fadeIn();
@@ -37,56 +87,44 @@ $(document).ready(function () {
 });
 
 $(document).ready(function () {
-
-    const protocol = window.location.protocol === 'https:' ? 'https://' : 'http://';
-    const hostname = window.location.hostname;
-    const port = window.location.port ? ':' + window.location.port : '';  
-    const siteUrl = protocol + hostname + port;
+    var protocol = window.location.protocol === 'https:' ? 'https://' : 'http://';
+    var hostname = window.location.hostname;
+    var port = window.location.port ? ':' + window.location.port : '';  
+    var siteUrl = protocol + hostname + port;
 
     console.log("Site URL: ", siteUrl);  
 
-    let currentPage = 1;  
-    const pageSize = 15;  
-    let isLoading = false;  
-    let hasMorePosts = true;  
+    var currentPage = 1;
+    var pageSize = 15;
+    var isLoading = false;
+    var hasMorePosts = true;
 
     function fetchPosts(page) {
-
+        if (isLoading || !hasMorePosts) return;  
         isLoading = true;
-        console.log('Fetching posts for page:', page);  
+
+        console.log(`Fetching posts for page: ${page}`);
 
         $.ajax({
             url: `${siteUrl}/api/v1/fetch_posts.php`,
             type: 'GET',
-            data: {
-                page: page,
-                page_size: pageSize,
-            },
+            data: { page, page_size: pageSize },
             success: function(response) {
-                console.log('API Response:', response);  
+                console.log('API Response:', response);
 
-                if (response.status === 'success') {
-                    let posts = response.data.posts;
+                if (response.status === 'success' && response.data.posts.length > 0) {
+                    var posts = response.data.posts;
 
-                    // Sort posts by created_at in descending order
-                    posts = posts.sort(function(a, b) {
-                        return new Date(b.created_at) - new Date(a.created_at);
-                    });
+                    posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-                    posts.forEach(function(post) {
-                        const date = new Date(post.created_at);
-                        
-                        const options = { 
-                            year: 'numeric', 
-                            month: 'long', 
-                            day: 'numeric' 
-                        };
+                    posts.forEach(post => {
+                        var date = new Date(post.created_at);
+                        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+                        var formattedDate = date.toLocaleDateString(undefined, options);
 
-                        const formattedDate = date.toLocaleDateString(undefined, options);
+                        console.log('Formatted Date:', formattedDate);
 
-                        console.log('Formatted Date:', formattedDate); 
-
-                        const postHtml = `
+                        var postHtml = `
                         <div class="col-md-4 col-sm-6 col-xs-12">
                             <div class="post-card">
                                 <div class="post-header-top">
@@ -104,60 +142,51 @@ $(document).ready(function () {
                         `;
                         $('.row').append(postHtml);
                     });
-                    
+
                     if (response.pagination && response.pagination.next_url) {
-                        currentPage++;  
+                        currentPage++;
                     } else {
                         console.log('No more posts available.');
-                        hasMorePosts = false;  
+                        hasMorePosts = false;
                     }
                 } else {
-                    console.error('API Error:', response.message);  
+                    console.log('No posts returned.');
+                    hasMorePosts = false;
                 }
 
-                isLoading = false;  
+                isLoading = false;
             },
             error: function(xhr, status, error) {
-                console.error('AJAX Error:', error);  
+                console.error('AJAX Error:', error);
                 isLoading = false;
             }
         });
     }
 
-    window.addEventListener('scroll', onScroll);
-
     function onScroll() {
-        const columns = document.querySelectorAll('.post-container');  
-        let nearBottom = false;
+        if (!hasMorePosts || isLoading) return;
 
-        columns.forEach(column => {
-            const columnBottom = column.getBoundingClientRect().bottom;  
-            const viewportBottom = window.innerHeight + window.scrollY;  
+        var scrollY = window.scrollY;
+        var windowHeight = window.innerHeight;
+        var docHeight = document.documentElement.scrollHeight;
 
-            console.log('Column Bottom:', columnBottom);  
-            console.log('Viewport Bottom:', viewportBottom);  
-
-            if (columnBottom <= viewportBottom + 100) {
-                nearBottom = true;
-            }
-        });
-
-        if (nearBottom) {
-            console.log('Near the bottom, fetching more posts...');
-            fetchPosts(currentPage);  
-            currentPage++;  
+        if (scrollY + windowHeight >= docHeight - 200) {  
+            console.log('Near bottom, fetching more posts...');
+            fetchPosts(currentPage);
         }
-        
     }
 
+    $(window).on('scroll', onScroll);
+
+    fetchPosts(currentPage);
 });
 
 $(document).ready(function () {
 
     function getCookie(name) {
-        let cookieArr = document.cookie.split(';');
-        for (let i = 0; i < cookieArr.length; i++) {
-            let cookie = cookieArr[i].trim();
+        var cookieArr = document.cookie.split(';');
+        for (var i = 0; i < cookieArr.length; i++) {
+            var cookie = cookieArr[i].trim();
             if (cookie.startsWith(name + "=")) {
                 return cookie.substring(name.length + 1);
             }
@@ -165,19 +194,20 @@ $(document).ready(function () {
         return null;
     }    
 
-    const protocol = window.location.protocol === 'https:' ? 'https://' : 'http://';
-    const hostname = window.location.hostname;
-    const port = window.location.port ? ':' + window.location.port : '';  
-    const siteUrl = protocol + hostname + port;
+    var protocol = window.location.protocol === 'https:' ? 'https://' : 'http://';
+    var hostname = window.location.hostname;
+    var port = window.location.port ? ':' + window.location.port : '';  
+    var siteUrl = protocol + hostname + port;
 
     console.log("Site URL: ", siteUrl);  
 
     $('#submit-post').on('click', function () {
 
-        const username = getCookie('username'); 
-        const password = getCookie('password'); 
+        var username = getCookie('username'); 
 
-        const content = $('.yap-here').val(); 
+        var password = getCookie('password'); 
+
+        var content = $('.yap-here').val(); 
 
         console.log("Post Data: ", {
             username: username,
@@ -185,7 +215,7 @@ $(document).ready(function () {
             content: content,
         });
 
-        const postData = {
+        var postData = {
             username: username,
             password: password,
             content: content,
@@ -200,11 +230,11 @@ $(document).ready(function () {
             contentType: 'application/json',
             success: function(response) {
                 if (response.status === 'success') {
-                    const date = new Date(response.data.created_at);
-                    const options = { year: 'numeric', month: 'long', day: 'numeric' };
-                    const formattedDate = date.toLocaleDateString(undefined, options);
+                    var date = new Date(response.data.created_at);
+                    var options = { year: 'numeric', month: 'long', day: 'numeric' };
+                    var formattedDate = date.toLocaleDateString(undefined, options);
 
-                    const postHtml = `
+                    var postHtml = `
                     <div class="col-md-4 col-sm-6 col-xs-12">
                         <div class="post-card">
                             <div class="post-header-top">
@@ -228,7 +258,26 @@ $(document).ready(function () {
 
                     $('#write-post-expanded').fadeOut(function () {
 
-                        var writePostCard = $('<div class="col-md-4 col-sm-6 col-xs-12"><div class="write-post-card" id="write-post-card"><p>Write something...</p></div></div>');
+                        var writePostCard = $('<div class="col-md-4 col-sm-6 col-xs-12">' +
+                            '<div class="write-post-card" id="write-post-card">' +
+                                '<textarea id="post-text-area">Share what\'s new...</textarea>' +
+                                '<div id="triangle-write" class="triangle-write"></div>' +
+                                '<div class="post-create-icons">' +
+                                    '<div class="write-post-icon">' +
+                                        '<div class="image-write"></div>' +
+                                        '<br><br>' +
+                                        '<span style="color: black; font-weight: bold;">Text</span>' +
+                                    '</div>' +
+                                    '<div class="write-post-icon">' +
+                                        '<div class="image-photo"></div>' +
+                                        '<br><br>' +
+                                        '<span>Photos</span>' +
+                                    '</div>' +
+                                '</div>' +
+                            '</div>' +
+                        '</div>');                        
+                        
+                        
                         $('.row').prepend(writePostCard); 
             
                         writePostCard.fadeIn();

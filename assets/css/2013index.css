@@ -232,3 +232,81 @@ body {
     vertical-align: top;
 }
 
+#post-text-area {
+    border: 1px solid #d8d8d8;
+    text-indent: 2ch;
+    background: #fff;
+    resize: none;
+    height: 100px;
+    width: 100%;
+    line-height: 1.5;
+    font-size: 16;
+    color: #8b8b8b;
+}
+
+.post-create-icons {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-left: 30px;
+    gap: 40px;
+    line-height: 15px;
+    margin-top: 18px;
+}
+
+.post-create-icons {
+    color: #8b8b8b;
+    font-size: 12px;
+}
+
+.image-write {
+    width: 25px;
+    width: 25px;
+}
+
+.image-photo {
+    width: 25px;
+    width: 25px;
+}
+
+.image-write {
+    background-image: url("/assets/site_images/loogleicon-02.svg");
+    width: 18px;
+    height: 18px;
+    scale: 1.15;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 4px;
+    position: relative;
+    top: 5px;
+}
+
+.image-photo {
+    background-image: url("/assets/site_images/loogleicon-03.svg");
+    width: 18px;
+    height: 18px;
+    scale: 1.15;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 9px;
+    position: relative;
+    top: 5px;
+}
+
+.write-post-icon  {
+    border-right: 2px solid #00000017;
+    padding: 0 29px 0 0px;
+}
+
+#triangle-write {
+    transform: rotate(45deg);
+    display: block;
+    position: absolute;
+    right: 88%;
+    border-bottom: 1px solid #d8d8d8;
+    border-right: 1px solid #d8d8d8;
+    background-color: #fff;
+    width: 14px;
+    height: 14px;
+    content: "";
+  }
