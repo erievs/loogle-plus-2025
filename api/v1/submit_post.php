@@ -19,7 +19,7 @@ class PostAPI
         $password = $postData['password'];
         $content = $postData['content'];
         $siteEmbedUrl = $postData['site_embed_url'] ?? null;
-        $imageUrl = $postData['image_url'] ?? null;
+        $imageUrl = isset($_FILES['image']) ? $this->handleImageUpload() : null; 
         $youtubeVideoUrl = $postData['youtube_video_url'] ?? null;
         $community = $postData['community'] ?? null;
 
@@ -28,14 +28,14 @@ class PostAPI
             return $authResponse;  
         }
 
-        if (empty($username) || empty($content)) {
-            return $this->response('error', 'Username and content are required.');
+        if (empty($username) || (empty($content) && empty($image_url))) {
+            return $this->response('error', 'Username and either content or image are required.');
         }
+             
 
         $mentionedUsernames = $this->getMentionedUsernames($content);
 
         try {
-
             $stmt = $this->pdo->prepare("INSERT INTO posts 
                                             (username, content, site_embed_url, image_url, youtube_video_url, community, plus_one_usernames, plus_one_count) 
                                             VALUES 
@@ -101,13 +101,11 @@ class PostAPI
     private function sendNotification(string $mentionedUsername, string $authorUsername, int $postId): void
     {
         try {
-
             $stmt = $this->pdo->prepare("SELECT * FROM accounts WHERE username = :username");
             $stmt->execute(['username' => $mentionedUsername]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user) {
-
                 $stmt = $this->pdo->prepare("INSERT INTO notifications (receiver, sender, post_id, content, status) 
                                              VALUES (:receiver, :sender, :post_id, :content, 'unread')");
                 $stmt->execute([
@@ -118,8 +116,35 @@ class PostAPI
                 ]);
             }
         } catch (PDOException $e) {
-
+            // Handle exception if needed
         }
+    }
+
+    private function handleImageUpload(): ?string
+    {
+        if (!isset($_FILES['image'])) {
+            return null;
+        }
+
+        $file = $_FILES['image'];
+        $fileName = uniqid() . '_' . bin2hex(random_bytes(5)) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+
+        $targetDirectory = '../../assets/user_images/';
+        $targetFile = $targetDirectory . $fileName;
+
+        $validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+        $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+        if (!in_array($fileExtension, $validExtensions)) {
+            return null;
+        }
+
+        $siteUrl = "http://" . $_SERVER['HTTP_HOST'];  
+        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+            return $siteUrl . '/assets//user_images/' . $fileName;
+        }
+        
+        return null;
     }
 
     private function response(string $status, string $message, array $data = []): array
@@ -132,19 +157,11 @@ class PostAPI
     }
 }
 
-$requestData = json_decode(file_get_contents('php://input'), true);
-
-if ($requestData === null) {
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Invalid JSON or no data provided.',
-    ]);
-    exit();
-}
+// Handle request and pass it to PostAPI
+$requestData = $_POST;
 
 $authAPI = new PostAPI($pdo);
 $response = $authAPI->submitPost($requestData);
 
 echo json_encode($response);
 
-?>

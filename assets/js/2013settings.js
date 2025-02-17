@@ -1,9 +1,9 @@
 $(document).ready(function () {
 
     function getCookie(name) {
-        let cookieArr = document.cookie.split(';');
-        for (let i = 0; i < cookieArr.length; i++) {
-            let cookie = cookieArr[i].trim();
+        var cookieArr = document.cookie.split(';');
+        for (var i = 0; i < cookieArr.length; i++) {
+            var cookie = cookieArr[i].trim();
             if (cookie.startsWith(name + "=")) {
                 return cookie.substring(name.length + 1);
             }
@@ -12,9 +12,9 @@ $(document).ready(function () {
     }
 
     function setCookie(name, value, days) {
-        let expires = "";
+        var expires = "";
         if (days) {
-            let date = new Date();
+            var date = new Date();
             date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
             expires = "; expires=" + date.toUTCString();
         }

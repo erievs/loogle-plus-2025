@@ -9,6 +9,10 @@
    }
    
    include './account/check_login.php';
+
+   $username = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_COOKIE['username']) ? $_COOKIE['username'] : 'Not logged in');
+   $password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOKIE['password']) ? $_COOKIE['password'] : 'Not available');
+   
    
 ?>
 
@@ -42,12 +46,40 @@
 
                   </div>
                   
+                  <div class="attach-photos-row">
+                     <div class="attach">Attach</div>
+
+                     <div id="mymotherquestionmark" class="photo-icon">
+                        <div class="icon-row image-photo"></div>
+                        <span>Photo</span>
+                     </div>
+
+                     <div id="bobisbackbutfuckhim" class="photo-icon">
+                        <div class="icon-row image-link"></div>
+                        <span>Link</span>
+                     </div>
+
+                     <div id="videosarebackbaby" class="photo-icon">
+                        <div class="icon-row image-video"></div>
+                        <span>Video</span>
+                     </div>
+                  </div>
+
+                  <div class="upload-area" style="display: none;">
+
+                     <div class="add-photos">Add Photos:</div>
+
+                     <button class="upload-button" id="openFileDialog">Upload from computer</button>
+                     <input type="file" id="image-upload" style="display:none">
+                  </div>
+
 
 
                   <div class="write-post-footer">
 
+                     <button class="btn btn-primary" id="submit-post">Share</butt>
                      <button class="btn btn-default" id="cancel-post">Cancel</button>
-                     <button class="btn btn-primary" id="submit-post">Post</button>
+         
 
                   </div>
                

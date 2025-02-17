@@ -29,6 +29,8 @@ $(document).ready(function() {
 });
 
 
+
+
 $(document).ready(function () {
 
     $('#write-post-card').on('click', function () {
@@ -43,47 +45,53 @@ $(document).ready(function () {
         $('#write-post-expanded').css('display', 'block'); 
     });
 
+    
+    $('#mymotherquestionmark').on('click', function () {
+        $('.attach-photos-row').hide();
+        $('.upload-area').fadeIn();      
+        $('.write-post-footer').css('margin-top', '9    %'); 
+    });
+
     $('#cancel-post').on('click', function () {
-
-        $('#write-post-expanded').fadeOut(function () {
-
-            var writePostCard = $('<div class="col-md-4 col-sm-6 col-xs-12">' +
-                '<div class="write-post-card" id="write-post-card">' +
-                    '<textarea id="post-text-area">Share what\'s new...</textarea>' +
-                    '<div id="triangle-write" class="triangle-write"></div>' +
-                    '<div class="post-create-icons">' +
-                        '<div class="write-post-icon">' +
-                            '<div class="image-write"></div>' +
-                            '<br><br>' +
-                            '<span style="color: black; font-weight: bold;">Text</span>' +
-                        '</div>' +
-                        '<div class="write-post-icon">' +
-                            '<div class="image-photo"></div>' +
-                            '<br><br>' +
-                            '<span>Photos</span>' +
+        if ($('.upload-area').is(':visible')) {
+            $('.upload-area').hide();  
+            $('.attach-photos-row').show();
+            $('.write-post-footer').css('margin-top', '12%'); 
+        } else {
+            $('#write-post-expanded').fadeOut(function () {
+                var writePostCard = $('<div class="col-md-4 col-sm-6 col-xs-12">' +
+                    '<div class="write-post-card" id="write-post-card">' +
+                        '<textarea id="post-text-area">Share what\'s new...</textarea>' +
+                        '<div id="triangle-write" class="triangle-write"></div>' +
+                        '<div class="post-create-icons">' +
+                            '<div class="write-post-icon">' +
+                                '<div class="image-write"></div>' +
+                                '<br><br>' +
+                                '<span style="color: black; font-weight: bold;">Text</span>' +
+                            '</div>' +
+                            '<div class="write-post-icon">' +
+                                '<div class="image-photo"></div>' +
+                                '<br><br>' +
+                                '<span>Photos</span>' +
+                            '</div>' +
                         '</div>' +
                     '</div>' +
-                '</div>' +
-            '</div>');            
-            
-            
-            $('.row').prepend(writePostCard); 
+                '</div>');
 
-            writePostCard.fadeIn();
+                $('.row').prepend(writePostCard);
+                writePostCard.fadeIn();
 
-            writePostCard.find('#write-post-card').on('click', function () {
-
-                $(this).closest('.col-md-4').fadeOut(function () {
-
-                    $(this).remove(); 
-
-                    $('#write-post-expanded').fadeIn(); 
+                writePostCard.find('#write-post-card').on('click', function () {
+                    $(this).closest('.col-md-4').fadeOut(function () {
+                        $(this).remove();
+                        $('#write-post-expanded').fadeIn();
+                    });
+                    $('#write-post-expanded').css('display', 'block');
                 });
-
-                $('#write-post-expanded').css('display', 'block'); 
             });
-        });
+        }
     });
+
 });
 
 $(document).ready(function () {
@@ -137,6 +145,7 @@ $(document).ready(function () {
                                     </div>
                                 </div>
                                 <div class="post-body">${post.content}</div>
+                                <img class="post-image" ${post.image_url ? `src="${post.image_url}"` : ''}>
                             </div>
                         </div>
                         `;
@@ -180,7 +189,6 @@ $(document).ready(function () {
 
     fetchPosts(currentPage);
 });
-
 $(document).ready(function () {
 
     function getCookie(name) {
@@ -192,7 +200,7 @@ $(document).ready(function () {
             }
         }
         return null;
-    }    
+    }
 
     var protocol = window.location.protocol === 'https:' ? 'https://' : 'http://';
     var hostname = window.location.hostname;
@@ -201,13 +209,31 @@ $(document).ready(function () {
 
     console.log("Site URL: ", siteUrl);  
 
+    $('#openFileDialog').on('click', function() {
+        $('#image-upload').click(); 
+    });
+
+    /* For the future
+    $('#image-upload').on('change', function() {
+        var file = this.files[0]; 
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#image-preview').remove();
+                var previewHtml = `<img src="${e.target.result}" id="image-preview" style="max-width: 200px; margin-top: 10px;">`;
+                $('#openFileDialog').after(previewHtml); 
+            };
+            reader.readAsDataURL(file); 
+        }
+    });
+    */
+
     $('#submit-post').on('click', function () {
 
         var username = getCookie('username'); 
-
         var password = getCookie('password'); 
-
         var content = $('.yap-here').val(); 
+
 
         console.log("Post Data: ", {
             username: username,
@@ -215,19 +241,24 @@ $(document).ready(function () {
             content: content,
         });
 
-        var postData = {
-            username: username,
-            password: password,
-            content: content,
-        };
+        var formData = new FormData();
+        formData.append('username', username);
+        formData.append('password', password);
+        formData.append('content', content);
+        
+        var imageFile = $('#image-upload')[0].files[0]; 
+        if (imageFile) {
+            formData.append('image', imageFile);
+        }
 
         $('#submit-post').prop('disabled', true);
 
         $.ajax({
             url: `${siteUrl}/api/v1/submit_post.php`,  
             type: 'POST',
-            data: JSON.stringify(postData),
-            contentType: 'application/json',
+            data: formData,
+            contentType: false, 
+            processData: false,  
             success: function(response) {
                 if (response.status === 'success') {
                     var date = new Date(response.data.created_at);
@@ -247,6 +278,7 @@ $(document).ready(function () {
                                 </div>
                             </div>
                             <div class="post-body">${response.data.content}</div>
+                            <img class="post-image" ${response.data.image_url ? `src="${response.data.image_url}"` : ''}>
                         </div>
                     </div>
                     `;

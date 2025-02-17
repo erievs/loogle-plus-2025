@@ -1,9 +1,9 @@
 $(document).ready(function() {
-    const updateNotifications = async () => {
+    var updateNotifications = async () => {
         try {
 
-            const config = await loadConfig();
-            const siteUrl = config.siteUrl;
+            var config = await loadConfig();
+            var siteUrl = config.siteUrl;
 
             console.log("Current username:", username);
 
@@ -12,7 +12,7 @@ $(document).ready(function() {
                 return;
             }
 
-            const response = await $.ajax({
+            var response = await $.ajax({
                 url: `${siteUrl}/api/v1/notifications.php`,  
                 method: 'GET',
                 data: {
@@ -43,11 +43,11 @@ $(document).ready(function() {
 });
 
 $(document).ready(function () {
-    const updateNotifications = async () => {
+    var updateNotifications = async () => {
         try {
 
-            const config = await loadConfig();
-            const siteUrl = config.siteUrl;
+            var config = await loadConfig();
+            var siteUrl = config.siteUrl;
 
             console.log("Current username:", username);
 
@@ -57,7 +57,7 @@ $(document).ready(function () {
                 return;
             }
 
-            const response = await $.ajax({
+            var response = await $.ajax({
                 url: `${siteUrl}/api/v1/notifications.php`,
                 method: 'GET',
                 data: {
@@ -73,12 +73,12 @@ $(document).ready(function () {
 
                 $('#notifications-count').text(response.data.notifications.length);
 
-                const notifications = response.data.notifications;
-                const mentionsContainer = $('.mentions-container');
+                var notifications = response.data.notifications;
+                var mentionsContainer = $('.mentions-container');
                 mentionsContainer.empty(); 
 
                 notifications.forEach(notification => {
-                    const mentionHTML = `
+                    var mentionHTML = `
                         <div class="mention" data-id="${notification.id}">
                             <img src="${siteUrl}/api/v1/fetch_profile_picture.php?name=${notification.sender}" 
                                  alt="PFP" 
@@ -99,7 +99,7 @@ $(document).ready(function () {
                 });
 
                 $('.mentions-container .exit').off('click').on('click', function () {
-                    const notificationId = $(this).data('id');
+                    var notificationId = $(this).data('id');
                     removeNotification(notificationId, siteUrl);
                     $(this).closest('.mention').animate({
                         marginLeft: "-100%",
@@ -116,14 +116,14 @@ $(document).ready(function () {
         }
     };
 
-    const removeNotification = async (notificationId, siteUrl) => {
+    var removeNotification = async (notificationId, siteUrl) => {
         try {
 
-            const requestUrl = `${siteUrl}/api/v1/notifications.php?request=read_notification&username=${encodeURIComponent(username)}&id=${encodeURIComponent(notificationId)}`;
+            var requestUrl = `${siteUrl}/api/v1/notifications.php?request=read_notification&username=${encodeURIComponent(username)}&id=${encodeURIComponent(notificationId)}`;
 
             console.log("Request URL:", requestUrl);
 
-            const response = await $.ajax({
+            var response = await $.ajax({
                 url: requestUrl,
                 method: 'GET',
                 dataType: 'json'
@@ -132,7 +132,7 @@ $(document).ready(function () {
             console.log(`Notification ${notificationId} removed:`, response);
 
             if (response.status === 'success') {
-                const currentCount = parseInt($('#notifications-count').text(), 10) || 0;
+                var currentCount = parseInt($('#notifications-count').text(), 10) || 0;
                 $('#notifications-count').text(Math.max(0, currentCount - 1));
             } else {
                 console.error(`Failed to mark notification ${notificationId} as read:`, response.message);
@@ -150,15 +150,15 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#read-icon').on('click', async function() {
         try {
-            const config = await loadConfig();
-            const siteUrl = config.siteUrl;
+            var config = await loadConfig();
+            var siteUrl = config.siteUrl;
 
             if (username === 'Guest') {
                 $('#notifications-count').text('0');
                 return;
             }
 
-            const response = await $.ajax({
+            var response = await $.ajax({
                 url: `${siteUrl}/api/v1/notifications.php`,  
                 method: 'GET',
                 data: {

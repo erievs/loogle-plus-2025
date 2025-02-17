@@ -56,7 +56,7 @@ class PostAPI
                 $queryParams['community'] = $community;
             }
             
-            $sql .= " ORDER BY created_at ASC LIMIT " . (int)$pageSize . " OFFSET " . (int)$offset;
+            $sql .= " ORDER BY created_at DESC LIMIT " . (int)$pageSize . " OFFSET " . (int)$offset;
             
             $stmt = $this->pdo->prepare($sql);
             $stmt->execute($queryParams);

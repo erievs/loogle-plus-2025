@@ -16,6 +16,21 @@ are all in one API.
 
 - This will not work with an old loogle database.
 
+# Curl Requsts
+
+curl -X POST http://localhost:8000/api/v1/submit_post.php \
+-H "Content-Type: application/json" \
+-d '{
+    "username": "yourname",
+    "password": "yourpassword",
+    "content": "Your post content here",
+    "image": "default_profile_picture.jpg",
+    "site_embed_url": null,
+    "youtube_video_url": null,
+    "community": null
+}'
+
+
 
 # Things To just Know #
 
