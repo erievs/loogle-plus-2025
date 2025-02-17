@@ -399,14 +399,6 @@ body {
     width: 100%;
 }
 
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    justify-content: flex-start;
-    align-items: stretch; 
-}
-
 .col-md-4,
 .col-sm-6,
 .col-xs-12 {
