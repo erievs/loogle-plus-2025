@@ -15,6 +15,9 @@ $password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOK
 
 ?>
 <!DOCTYPE html>
+
+<!-- somepoint do settings saving on the database -->
+
 <html lang="en">
 
 <head>
@@ -34,7 +37,8 @@ $password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOK
             <div class="settings-items">
 
                 <div class="settings-item">
-                    <b>Site Settings</b>
+                    
+                    <b class="settings-row-title">Site Settings</b>
 
                     <br>
 

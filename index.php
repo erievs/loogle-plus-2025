@@ -53,7 +53,7 @@ $password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOK
             <div class="attach">Attach</div>
 
             <div id="mymotherquestionmark" class="photo-icon">
-               <div class="icon-row image-photo"></div>
+               <div class="icon-row image-photo-blue"></div>
                <span>Photo</span>
             </div>
 
@@ -100,15 +100,15 @@ $password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOK
 
             <div class="post-create-icons">
                <div class="write-post-icon">
-                  <div class="image-write"></div>
+                  <div id="ue-image-write" class="image-write"></div>
                   <br> <br>
                   <span style="color: black; font-weight: bold;">Text</span>
                </div>
                
                <div class="write-post-icon">
-                  <div class="image-photo"></div>
+                  <div id="ue-image-photo" class="image-photo"></div>
                   <br> <br>
-                  <span>Photos</span>
+                  <span class="ue-attach-photo-row-photo-icon-adjust">Photos</span>
                </div>
             </div>
 

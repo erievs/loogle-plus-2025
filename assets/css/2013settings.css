@@ -1,3 +1,5 @@
+/* page setup */
+
 body, html {
     height: 100%;
     margin: 0;
@@ -21,11 +23,23 @@ body, html {
     height: 70vh;
 }
 
+/* end */
+
+
+/* page settings */
+
+.settings-row-title {
+    font-size: 16px;
+}
+
+
 .settings-items {
     padding: 1%;
 }
 
 #item-check {
     margin-top: 15px;
-    font-size: 11.5px;
+    font-size: 14.5px;
 }
+
+/* end */

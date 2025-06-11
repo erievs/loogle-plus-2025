@@ -19,15 +19,26 @@ class PostAPI
         $password = $postData['password'];
         $id = $postData['id'];
 
-        $authResponse = $this-> authenticateUser($username, $password);
+        $authResponse = $this-> AuthenticateUser($username, $password);
+       
         if ($authResponse['status'] !== 'success') {
             return $authResponse;  
         }
 
         try {
 
+            $stmt = $this->pdo->prepare("SELECT image_url FROM posts WHERE id = :id");
+            $stmt->execute([':id' => $id]);
+
+            $imageUrl = $stmt->fetchColumn();
+
+            if($imageUrl != null) {
+                $this -> HandleImageDeleting($imageUrl);
+            }
+
             $stmt = $this->pdo->prepare("DELETE FROM posts WHERE id = :id");
             $stmt->execute([':id' => $id]);
+
 
             return $this->response('success', 'Deleted post!');
 
@@ -36,7 +47,7 @@ class PostAPI
         }
     }
 
-    private function authenticateUser(string $username, string $password): array
+    private function AuthenticateUser(string $username, string $password): array
     {
         try {
             $stmt = $this->pdo->prepare("SELECT * FROM accounts WHERE username = :username");
@@ -51,6 +62,40 @@ class PostAPI
         } catch (PDOException $e) {
             return $this->response('error', 'Database error: ' . $e->getMessage());
         }
+    }
+
+    private function HandleImageDeleting(string $imageUrl)
+    {
+
+        $documentRoot = $_SERVER['DOCUMENT_ROOT']; 
+        
+        // there is 100% a better way of doing this but am lazy
+        
+        // but it works, so we do it, since image url is also going to be like "http://yap.com//yap/image.png"
+        // so there will always be three slashes up to the real path we can just delete the first three by splitting into parts
+        // and limiting the exploding (if you're reading this and know a better way create a pull requst)
+
+        $parts = explode('/', $imageUrl, 4); 
+        $relativePath = isset($parts[3]) ? '/' . $parts[3] : '';
+
+        error_log($relativePath);
+
+        $filePath = $documentRoot . $relativePath;
+
+        error_log("Image to delete: " . $filePath);
+
+        if (file_exists($filePath)) {
+            if (unlink($filePath)) {
+                return null;
+            } else {
+                error_log("Failed to delete file " . $filePath);
+                return;
+            }
+        } else {
+            error_log("Image does not exist " . $filePath);
+            return;
+        }
+
     }
 
     private function response(string $status, string $message, array $data = []): array

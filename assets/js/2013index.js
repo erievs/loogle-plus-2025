@@ -1,9 +1,9 @@
 
 $(document).ready(function() {
 
-    // stuff for checking compitibailtly
+    // stuff for checking compitibailtly (idk we we will use it later just here for funs ig)
 
-	var totalReplacements = 0;
+	/* var totalReplacements = 0;
 
 	$('script').each(function() {
 		var scriptContent = $(this).html();
@@ -27,6 +27,7 @@ $(document).ready(function() {
 	} else {
 		console.log("No 'let' or 'const' found to replace.");
 	}
+	*/
 
     // stuff to declare first (just some method used and varibles)
 
@@ -35,6 +36,8 @@ $(document).ready(function() {
 	var port = window.location.port ? ':' + window.location.port : '';
 	var siteUrl = protocol + hostname + port;
 
+
+	// some thing I found off of w3 schools works well enough
     function GetCookie(cname) {
         let name = cname + "=";
         let decodedCookie = decodeURIComponent(document.cookie);
@@ -108,13 +111,53 @@ $(document).ready(function() {
         });
 
         if (nearest) {
-            nearest.fadeOut(500);
-            nearest.remove();
+			
+			nearest.fadeOut(300, function(){ 
+				nearest.remove();
+			});
+
         }
     }
 
-    // fetching posts
+	// alert stuff (I wish I could have them in alert_handler but too pain in the as to figure out)
 
+    function ClearAlert() {
+        $(".site-alert").css("display: none");
+    }
+
+	function SetAlert(alert_message, alert_type) {
+
+		var valid_alert_types = ["info", "success", "warning", "danger"];
+
+		if (valid_alert_types.indexOf(alert_type) === -1) {
+			alert_type = "info";
+		}
+
+		// \d starts a dimiss link \de ends a dismis link
+		
+		alert_message = alert_message
+        .replace(/\n/g, '<br>')
+        .replace(/\\d(.*?)\\de/g, function (_, text) {
+            return '<a href="#" class="dismiss-alert-linkstyle" data-dismiss="alert" aria-label="Close">' + text + '</a>';
+        });
+
+
+		var alert_html = `
+        <div class="alert alert-${alert_type} alert-dismissible" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            ${alert_message}
+        </div>`;
+
+		$(".site-alert").html(alert_html).fadeIn(200);
+		
+    }
+	
+	// end
+
+	
+    // fetching posts
 
 	//console.log("Site URL: ", siteUrl);
 
@@ -130,6 +173,7 @@ $(document).ready(function() {
 		console.log(`Fetching posts for page: ${page}`);
 
 		$.ajax({
+			
 			url: `${siteUrl}/api/v1/fetch_posts.php`,
 			type: 'GET',
 			data: {
@@ -140,21 +184,23 @@ $(document).ready(function() {
 			success: function(response) {
 		
 				if (response.status === 'success' && response.data.posts.length > 0) {
+					
 					var posts = response.data.posts;
 
 					posts.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
 					posts.forEach(post => {
+
 						var date = new Date(post.created_at);
+
 						var options = {
 							year: 'numeric',
 							month: 'long',
 							day: 'numeric'
 						};
+
 						var formattedDate = date.toLocaleDateString(undefined, options);
 
-						console.log('Formatted Date:', formattedDate);
-                    
 						var postHtml = `
                             <div class="col-md-4 col-sm-6 col-xs-12">
                                 <div class="post-card" id=${post.id}>
@@ -216,19 +262,26 @@ $(document).ready(function() {
                                         <img class="post-image" ${post.image_url ? `src="${post.image_url}"` : ''}>
                                     </div>
                                 </div>
+
                             `;
 
                         };
 
 						$('.row').append(postHtml);
 					});
+					
+		
+					var pageDetails = response.data.pagination;
 
-					if (response.pagination && response.pagination.next_url) {
+					console.log("Page Details:\n" + JSON.stringify(pageDetails, null, 2));
+
+					if (pageDetails && pageDetails.next_url) {
 						currentPage++;
 					} else {
 						console.log('No more posts available.');
 						hasMorePosts = false;
 					}
+
 				} else {
 					console.log('No posts returned.');
 					hasMorePosts = false;
@@ -243,29 +296,27 @@ $(document).ready(function() {
 		});
 	}
 
-	function OnScroll() {
-		if (!hasMorePosts || isLoading) return;
 
-		var scrollY = window.scrollY;
-		var windowHeight = window.innerHeight;
-		var docHeight = document.documentElement.scrollHeight;
-
-		if (scrollY + windowHeight >= docHeight - 200) {
-			console.log('Near bottom, fetching more posts...');
+	$(window).on('scroll', function(){
+		if( $(window).scrollTop() > $(document).height() - $(window).height() ) {
+		
 			FetchPosts(currentPage);
-		}
-	}
 
-	$(window).on('scroll', OnScroll);
+			console.log('bottom of page');
+		}
+	}).scroll();
+	
+	
 
 
 	FetchPosts(currentPage);
 
+	// end
+
+
     // deleting posts
 
     $(document).on('click', '.delete-post', function(e) {
-
-        console.log("yap");
 
 		var username = GetCookie('username');
 		var password = GetCookie('password');
@@ -299,72 +350,80 @@ $(document).ready(function() {
 					alert('Error: ' + response.message);
 				}
 			},
+
 			error: function(xhr, status, error) {
 				console.error('AJAX Error:', error);
 				$('#submit-post').prop('disabled', false);
 			}
+
 		});
 
 	});
 
+	// end
+
     
     // plus-oneing a post
 
-
+	// end 
 
     // reverting stuff (for when you click cancel, rn just write post but latter comment writing)
 
-    function RevertPostWriting(response) {
+    function RevertPostWriting(response = null) {
         
-        var date = new Date(response.data.created_at);
-        var options = {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        };
-        
-        console.log(response);
+		$(".yap-here").val(""); 
+		$(".yap-here").attr("placeholder", "Share what's new"); 
 
-        var formattedDate = date.toLocaleDateString(undefined, options);
+		$("#image-upload").val(null); 
 
-        var postHtml = `
+		if(response != null) {
 
-            <div class="col-md-4 col-sm-6 col-xs-12">
-                <div class="post-card" id="${response.data.id}">
+			var date = new Date(response.data.created_at);
+			var options = {
+				year: 'numeric',
+				month: 'long',
+				day: 'numeric'
+			};
+			
+			var formattedDate = date.toLocaleDateString(undefined, options);
+	
+			var postHtml = `
+				<div class="col-md-4 col-sm-6 col-xs-12">
+					<div class="post-card" id="${response.data.id}">
 
-                    <div class="dropdown-post">
+						<div class="dropdown-post">
 
-                        <div class="dropdown">
+							<div class="dropdown">
 
-                            <p class="dropdown-icon" data-toggle="dropdown">﹀</p>
+								<p class="dropdown-icon" data-toggle="dropdown">﹀</p>
 
-                            <ul class="dropdown-menu" id="dropdown-menu-post">
-                                <li><a href="#">Edit post</a></li>
-                                <li><a class="delete-post" href="#">Delete post</a></li>
-                                <li><a href="#">Link to post</a></li>
-                                <li><a href="#">Disable comments</a></li>
-                            </ul>
-                        </div> 
+								<ul class="dropdown-menu" id="dropdown-menu-post">
+									<li><a href="#">Edit post</a></li>
+									<li><a class="delete-post" href="#">Delete post</a></li>
+									<li><a href="#">Link to post</a></li>
+									<li><a href="#">Disable comments</a></li>
+								</ul>
+							</div> 
 
-                    </div>
+						</div>
 
-                    <div class="post-header-top">
+						<div class="post-header-top">
 
-                        <img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${response.data.username}" 
-                            alt="${response.data.username}'s profile picture" 
-                            class="profile-pic-index">
-                            
-                        <div class="profile-info">
-                            <div class="profile-line1">${response.data.username}</div>
-                            <div class="profile-line2">Sharing Publicly <span class="post-footer">${formattedDate}</span></div>
-                        </div>
-                    </div>
-                    <div class="post-body">${response.data.content}</div>
-                    <img class="post-image" ${response.data.image_url ? `src="${response.data.image_url}"` : ''}>
-                </div>
-            </div>
-
-        `;
+							<img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${response.data.username}" 
+								alt="${response.data.username}'s profile picture" 
+								class="profile-pic-index">
+								
+							<div class="profile-info">
+								<div class="profile-line1">${response.data.username}</div>
+								<div class="profile-line2">Sharing Publicly <span class="post-footer">${formattedDate}</span></div>
+							</div>
+						</div>
+						<div class="post-body">${response.data.content}</div>
+						<img class="post-image" ${response.data.image_url ? `src="${response.data.image_url}"` : ''}>
+					</div>
+				</div>
+			`;
+		}
 
         $('.row').prepend(postHtml);
 
@@ -374,25 +433,35 @@ $(document).ready(function() {
 
         $('#write-post-expanded').fadeOut(function() {
 
-            var writePostCard = $('<div class="col-md-4 col-sm-6 col-xs-12">' +
-                '<div class="write-post-card" id="write-post-card">' +
-                '<textarea id="post-text-area">Share what\'s new...</textarea>' +
-                '<div id="triangle-write" class="triangle-write"></div>' +
-                '<div class="post-create-icons">' +
-                '<div class="write-post-icon">' +
-                '<div class="image-write"></div>' +
-                '<br><br>' +
-                '<span style="color: black; font-weight: bold;">Text</span>' +
-                '</div>' +
-                '<div class="write-post-icon">' +
-                '<div class="image-photo"></div>' +
-                '<br><br>' +
-                '<span>Photos</span>' +
-                '</div>' +
-                '</div>' +
-                '</div>' +
-                '</div>');
-
+			var writePostCard = $(
+				'<div class="col-md-4 col-sm-6 col-xs-12">' +
+				  '<div class="write-post-card" id="write-post-card">' +
+			  
+					'<textarea id="post-text-area">Share what\'s new...</textarea>' +
+			  
+					'<div id="triangle-write" class="triangle-write"></div>' +
+			  
+					'<div class="post-create-icons">' +
+			  
+					  '<div class="write-post-icon">' +
+						'<div id="ue-image-write" class="image-write"></div>' +
+						'<br><br>' +
+						'<span style="color: black; font-weight: bold;">Text</span>' +
+					  '</div>' +
+			  
+					  '<div class="write-post-icon">' +
+						'<div id="ue-image-photo" class="image-photo"></div>' +
+						'<br><br>' +
+						'<span class="ue-attach-photo-row-photo-icon-adjust">Photos</span>' +
+					  '</div>' +
+			  
+					'</div>' + 
+			  
+				  '</div>' + 
+			  
+				'</div>' 
+			);
+			  
 
             $('.row').prepend(writePostCard);
 
@@ -413,10 +482,12 @@ $(document).ready(function() {
 
     }
 
-    
+	// end
+
     // writing posts 
 
 	$('#write-post-card').on('click', function() {
+		
 
 		$(this).closest('.col-md-4').fadeOut(function() {
 
@@ -432,55 +503,33 @@ $(document).ready(function() {
 	$('#mymotherquestionmark').on('click', function() {
 		$('.attach-photos-row').hide();
 		$('.upload-area').fadeIn();
-		$('.write-post-footer').css('margin-top', '9    %');
+		$('.write-post-footer').css('margin-top', '9%');
 	});
-
-	$('#cancel-post').on('click', function() {
-		if ($('.upload-area').is(':visible')) {
-			$('.upload-area').hide();
-			$('.attach-photos-row').show();
-			$('.write-post-footer').css('margin-top', '12%');
-		} else {
-			$('#write-post-expanded').fadeOut(function() {
-				var writePostCard = $(
-                    '<div class="col-md-4 col-sm-6 col-xs-12">' +
-					    '<div class="write-post-card" id="write-post-card">' +
-					        '<textarea id="post-text-area">Share what\'s new...</textarea>' +
-					        '<div id="triangle-write" class="triangle-write"></div>' +
-					        '<div class="post-create-icons">' +
-					            '<div class="write-post-icon">' +
-					            '<div class="image-write"></div>' +
-					            '<br><br>' +
-					        '<span style="color: black; font-weight: bold;">Text</span>' +
-					    '</div>' +
-					'<div class="write-post-icon">' +
-					'<div class="image-photo"></div>' +
-					'<br><br>' +
-					'<span>Photos</span>' +
-					            '</div>' +
-					        '</div>' +
-					    '</div>' +
-					'</div>');
-
-				$('.row').prepend(writePostCard);
-				writePostCard.fadeIn();
-
-				writePostCard.find('#write-post-card').on('click', function() {
-					$(this).closest('.col-md-4').fadeOut(function() {
-						$(this).remove();
-						$('#write-post-expanded').fadeIn();
-					});
-					$('#write-post-expanded').css('display', 'block');
-				});
-
-			});
-		}
-	}); 
 
 
 	$('#openFileDialog').on('click', function() {
 		$('#image-upload').click();
 	});
+
+	$('#image-upload').on('change', function() {
+		var file = this.files[0];
+		if (file) {
+			var validTypes = ['image/jpeg', 'image/pjpeg'];
+	
+			if ($.inArray(file.type, validTypes) === -1) {
+
+				SetAlert(`There was an upload error.  \nMake sure to upload a JPG, GIF, WEBP, or PNG file and try again. \\dDismiss\\de`, "warning");
+
+			} else {
+				ClearAlert();
+			}
+		}
+	});
+
+	$('#cancel-post').on('click', function() {
+		RevertPostWriting();
+	}); 
+
 
 	/* For the future
 	$('#image-upload').on('change', function() {
@@ -505,8 +554,17 @@ $(document).ready(function() {
 
     */
 
+
 	$('#submit-post').on('click', function() {
 
+
+	});
+
+	// end
+
+	// submiting posts logic
+
+	function SubmitPost() {
 		var username = GetCookie('username');
 		var password = GetCookie('password');
 
@@ -520,11 +578,16 @@ $(document).ready(function() {
 		});
 
 		var formData = new FormData();
+		
 		formData.append('username', username);
 		formData.append('password', password);
-		formData.append('content', content);
+
+		if(content != null || content != "") {
+			formData.append('content', content);
+		}
 
 		var imageFile = $('#image-upload')[0].files[0];
+
 		if (imageFile) {
 			formData.append('image', imageFile);
 		}
@@ -540,19 +603,22 @@ $(document).ready(function() {
 			success: function(response) {
 				if (response.status === 'success') {
 					
-                    RevertPostWriting(response);
+					RevertPostWriting(response);
 
 				} else {
-					alert('Error: ' + response.message);
+
+					ClearAlert();
+					SetAlert("Failed to submit your post, " + response.message, "danger");
+
 					$('#submit-post').prop('disabled', false);
 				}
 			},
+
 			error: function(xhr, status, error) {
 				console.error('AJAX Error:', error);
 				$('#submit-post').prop('disabled', false);
 			}
 		});
+	}
 
-	});
-    
 });

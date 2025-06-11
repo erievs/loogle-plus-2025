@@ -1,7 +1,8 @@
 $(document).ready(function () {
-    alert_handler();
+    
+    AlertHandler();
 
-    function getCookie(name) {
+    function GetCookie(name) {
         var cookieArr = document.cookie.split(";");
         for (var i = 0; i < cookieArr.length; i++) {
             var cookie = cookieArr[i].trim();
@@ -12,9 +13,9 @@ $(document).ready(function () {
         return null;
     }
 
-    function alert_handler() {
+    function AlertHandler() {
 
-        if (getCookie("hide_alerts") === "true") {
+        if (GetCookie("hide_alerts") === "true") {
             console.log("Alerts are hidden due to cookie.");
             return; 
         }
@@ -45,4 +46,5 @@ $(document).ready(function () {
             console.log("Error: active_alert.json not found.");
         });
     }
+
 });

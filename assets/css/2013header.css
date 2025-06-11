@@ -1,11 +1,39 @@
+/* this section should only be used for boostrap alerts */
+
 .alert-info {
     background-color: #3b84f2;
     color: white;
 }
 
 .alert-warning {
-    background-color: #eed202;
-    color: black;
+
+    background-color: #474747;
+   
+    color: white;
+    font-weight: bold;
+
+    font-size: 14px;
+    text-align: center;
+}
+
+.alert-warning .close {
+    display: none;
+}
+
+.dismiss-alert-linkstyle,
+.dismiss-alert-linkstyle:visited,
+.dismiss-alert-linkstyle:active,
+.dismiss-alert-linkstyle:focus {
+    color: white;
+    text-decoration: underline;
+}
+
+.dismiss-alert-linkstyle:hover {
+    color: white;
+    text-decoration: underline;
+
+    border: 1px solid #3b84f2;
+    padding: 0.25px;
 }
 
 .alert-danger {
@@ -18,6 +46,10 @@
     color: white;
 }
 
+
+/* end */
+
+/* the true header */
 
 .header-logo {
     height: 40px;
@@ -80,6 +112,10 @@
     margin-top: 5px;
 }
 
+/* end */
+
+/* mentions section */
+
 .red-square-dropdown {
     display: inline-block;
     vertical-align: middle;
@@ -138,83 +174,6 @@
     height: 1px;
     margin: 10px 0;
     background-color: #e0e0e0;
-}
-
-@media (max-width: 768px) {
-    #search-box {
-        width: 100%;
-        margin-top: 10px;
-    }
-
-    .navbar-header {
-        float: none;
-        text-align: center;
-    }
-
-    .navbar-brand {
-        margin: 0 auto;
-    }
-
-    .navbar-nav {
-        float: none;
-        text-align: center;
-    }
-
-    .navbar-nav>li {
-        display: inline-block;
-        float: none;
-    }
-
-    .red-square-dropdown {
-        margin-right: 0;
-        margin-top: 10px;
-    }
-
-    .red-square-dropdown .red-square {
-        width: 25px;
-        height: 25px;
-        margin-top: 0;
-    }
-
-    .profile-pic {
-        width: 30px;
-        height: 30px;
-    }
-
-    #username-header {
-        font-size: 14px;
-    }
-}
-
-@media (max-width: 480px) {
-    #search-box {
-        font-size: 14px;
-        padding: 5px;
-    }
-
-    .search-button {
-        padding: 4px 12px;
-        font-size: 12px;
-    }
-
-    .navbar-nav>li {
-        display: block;
-        text-align: left;
-    }
-
-    .red-square-dropdown {
-        text-align: left;
-    }
-
-    #username-header {
-        display: block;
-        text-align: left;
-        margin-bottom: 5px;
-    }
-
-    .profile-pic {
-        margin-bottom: 5px;
-    }
 }
 
 .red-square-dropdown {
@@ -381,3 +340,70 @@ div.hacky-fix {
 #read-icon:hover {
     opacity: 1;
 }
+
+/* end */
+
+/* respoive styles start */
+
+@media (max-width: 768px) {
+
+    .navbar-form {
+        display: grid;
+    }
+
+    .navbar-nav .open .dropdown-menu {
+        position: absolute;
+        background: rgb(229, 229, 229);
+        width: 75vw;
+    }
+
+    #search-box {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .navbar-header {
+        float: none;
+        text-align: center;
+    }
+
+    .navbar-brand {
+        margin: 0 auto;
+        float: none;
+        display: block;
+    }
+
+    .navbar-nav {
+        float: none;
+        text-align: center;
+    }
+
+    .navbar-nav > li {
+        display: inline-block;
+        float: none;
+    }
+
+    .red-square-dropdown {
+        margin: 10px auto 0 auto;
+        text-align: center;
+    }
+
+    .red-square-dropdown .red-square {
+        width: 35px;
+        height: 35px;
+        margin-top: 0;
+    }
+
+    .profile-pic {
+        width: 30px;
+        height: 30px;
+    }
+
+    #username-header {
+        font-size: 14px;
+    }
+}
+
+
+
+/* end */

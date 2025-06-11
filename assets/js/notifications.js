@@ -2,7 +2,7 @@ $(document).ready(function() {
     var updateNotifications = async () => {
         try {
 
-            var config = await loadConfig();
+            var config = await LoadConfig();
             var siteUrl = config.siteUrl;
 
             console.log("Current username:", username);
@@ -46,7 +46,7 @@ $(document).ready(function () {
     var updateNotifications = async () => {
         try {
 
-            var config = await loadConfig();
+            var config = await LoadConfig();
             var siteUrl = config.siteUrl;
 
             console.log("Current username:", username);
@@ -150,7 +150,7 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('#read-icon').on('click', async function() {
         try {
-            var config = await loadConfig();
+            var config = await LoadConfig();
             var siteUrl = config.siteUrl;
 
             if (username === 'Guest') {

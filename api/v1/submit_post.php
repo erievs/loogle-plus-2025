@@ -17,21 +17,32 @@ class PostAPI
     {
         $username = $postData['username'];
         $password = $postData['password'];
-        $content = $postData['content'];
+
+        $content = $postData['content'] ?? null; 
+
         $siteEmbedUrl = $postData['site_embed_url'] ?? null;
-        $imageUrl = isset($_FILES['image']) ? $this->handleImageUpload() : null; 
+
+        $imageUrl = isset($_FILES['image']) ? $this-> HandleImageUpload() : null; 
+        
         $youtubeVideoUrl = $postData['youtube_video_url'] ?? null;
+
         $community = $postData['community'] ?? null;
+        
 
         $authResponse = $this->authenticateUser($username, $password);
+
         if ($authResponse['status'] !== 'success') {
             return $authResponse;  
         }
 
-        if (empty($username) || (empty($content) && empty($image_url))) {
-            return $this->response('error', 'Username and either content or image are required.');
+        if (empty($username)) {
+            return $this->response('error', 'Username required.');
         }
-    
+
+        if ($content == null && $imageUrl == null) {
+            return $this->response('error', 'content or an image is required.');
+        }
+
         $mentionedUsernames = $this->getMentionedUsernames($content);
 
         try {
@@ -119,7 +130,7 @@ class PostAPI
         }
     }
 
-    private function handleImageUpload(): ?string
+    private function HandleImageUpload(): ?string
     {
         if (!isset($_FILES['image'])) {
             return null;
@@ -139,6 +150,7 @@ class PostAPI
         }
 
         $siteUrl = "http://" . $_SERVER['HTTP_HOST'];  
+        
         if (move_uploaded_file($file['tmp_name'], $targetFile)) {
             return $siteUrl . '/assets//user_images/' . $fileName;
         }

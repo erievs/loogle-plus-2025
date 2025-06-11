@@ -1,9 +1,12 @@
+/* page setup section */
+
 body {
 	background: #e5e5e5;
 	margin: 0;
 	padding: 0;
 	font-family: 'Roboto', sans-serif;
 }
+
 .container {
 	display: flex;
 	flex-wrap: wrap;
@@ -13,38 +16,38 @@ body {
 	max-width: 2000px;
 	width: 100%;
 }
+
 .row {
 	display: flex;
 	flex-wrap: wrap;
 	width: 100%;
 	justify-content: center;
 }
+
 .col-md-4,.col-sm-6,.col-xs-12 {
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
+	justify-content: flex-start;
 	margin: 10px;
 	width: 100%;
 }
-@media (max-width: 575px) {
-	.col-xs-12 {
-		width: 100%;
-	}
+
+.post-image {
+	width: 100%;
+	margin-top: 10px;
+	margin-bottom: 15px;
 }
-@media (min-width: 576px) and (max-width: 767px) {
-	.col-sm-6 {
-		width: 500px;
-	}
-}
-@media (min-width: 768px) {
-	.col-md-4 {
-		width: 500px;
-	}
-}
+
+/* end */
+
+
+/* posts css section */
+
 .post, .post-create {
 	border-radius: 2px;
 	box-shadow: 0 1px 3px 1px #00000017;
 }
+
 .post-card {
 	display: flex;
 	flex-direction: column;
@@ -56,105 +59,8 @@ body {
 	box-sizing: border-box;
 	width: 500px;
 }
-.write-post-card, .post-card {
-	background: #fff;
-	padding: 15px;
-	border: 1px solid #ddd;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-	margin: 10px;
-	top: 25px;
-	position: relative;
-	width: 500px;
-	min-height: 250px;
-}
-.write-post-expanded {
-	display: none;
-	background: #fff;
-	margin: 20px 0;
-	border: 1px solid #ddd;
-	border: 1px solid rgba(10, 10, 10, 0.1);
-	margin: 40px auto 0px;
-	box-shadow: rgb(0, 0, 0) 3px 0px 33px 0px;
-	margin-bottom: 75px;
-	width: 650px;
-	height: 300px;
-	background: rgb(246, 246, 246);
-}
-.yap-here {
-	height: 100px;
-	width: 480px;
-	background: #fff;
-	resize: none;
-	position: relative;
-	border: 1px solid rgba(10, 10, 10, 0.1);
-	z-index: 2;
-	margin-left: 20px;
-	text-indent: 2ch;
-	background: #fff;
-	overflow: auto;
-	padding-top: 3px;
-	font-size: 16;
-	z-index: 2;
-}
-#cancel-post {
-	margin-right: 10px;
-	padding: 0px 20px;
-	cursor: pointer;
-	border: 1px solid rgba(10, 10, 10, 0.1);
-	height: 33px;
-	border-radius: 2px;
-	text-align: center;
-	top: 8px;
-	position: relative;
-	left: 20px;
-}
-#submit-post {
-	margin-right: 10px;
-	padding: 0px 20px;
-	cursor: pointer;
-	border: 1px solid rgba(10, 10, 10, 0.1);
-	height: 33px;
-	border-radius: 2px;
-	text-align: center;
-	top: 8px;
-	position: relative;
-	left: 20px;
-	background: #55a644;
-}
-.yap-here:focus {
-	outline: none;
-}
-#triangle {
-	transform: rotate(45deg);
-	width: 28px;
-	height: 28px;
-	z-index: 1;
-	border-bottom: 1px solid #d8d8d8;
-	border-right: 1px solid #d8d8d8;
-	background-color: #fff;
-	display: block;
-	position: absolute;
-	margin-top: -10vh;
-	margin-left: 14px;
-}
-.write-post-footer {
-	background: #fff;
-	display: flex;
-	height: 50px;
-	position: relative;
-	margin-top: 12%;
-	transition: margin 0.3s ease-in-out;
-}
-.write-post-stuff {
-	display: flex;
-	padding: 15px;
-}
-.profile-pic-h5n1 {
-	width: 100px;
-	height: 100px;
-	border-radius: 50%;
-	object-fit: cover;
-}
+
+
 .post-body {
 	margin: 5px 0;
 	font-size: 16px;
@@ -163,22 +69,26 @@ body {
 	font-size: 14px;
 	line-height: 1.4;
 }
+
 .post-header-top {
 	display: flex;
 	align-items: flex-start;
 	gap: 10px;
 	margin-bottom: 10px;
 }
+
 .profile-pic-index {
 	height: 50px;
 	width: 50px;
 	border-radius: 50%;
 	margin-right: 10px;
 }
+
 .dropdown-post {
     left: 92%;
     position: absolute;
 }
+
 .dropdown-icon {
 
     color: #404040;
@@ -195,6 +105,7 @@ body {
     cursor: pointer;
     position: absolute;
 }
+
 #dropdown-menu-post {
     left: -140px;
     top: 16px;
@@ -209,12 +120,14 @@ body {
 
     font-size: 13px;
 }
+
 .profile-info {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	margin: 1% 0 0 0;
 }
+
 .profile-line1 {
 	font-weight: bold;
 	font-size: 16px;
@@ -222,73 +135,130 @@ body {
 	font-size: inherit;
 	color: #262626;
 }
+
 .profile-line2 {
 	font-size: 14px;
 	color: #999;
 }
+
+
+/* end */
+
+/* write css post section */
+
+.write-post-card, .post-card {
+	background: #fff;
+	padding: 15px;
+	border: 1px solid #ddd;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	margin: 10px;
+	top: 25px;
+	position: relative;
+	min-height: 250px;
+}
+
+.write-post-expanded {
+	display: none;
+	background: #fff;
+	margin: 20px 0;
+	border: 1px solid #ddd;
+	border: 1px solid rgba(10, 10, 10, 0.1);
+	margin: 40px auto 0px;
+	box-shadow: rgb(0, 0, 0) 3px 0px 33px 0px;
+	margin-bottom: 75px;
+	width: 650px;
+	height: 300px;
+	background: rgb(246, 246, 246);
+}
+
+.yap-here {
+	height: 100px;
+	width: 480px;
+	background: #fff;
+	resize: none;
+	position: relative;
+	border: 1px solid rgba(10, 10, 10, 0.1);
+	z-index: 2;
+	margin-left: 20px;
+	text-indent: 2ch;
+	background: #fff;
+	overflow: auto;
+	padding-top: 3px;
+	font-size: 16;
+	z-index: 2;
+}
+
+#cancel-post {
+	margin-right: 10px;
+	padding: 0px 20px;
+	cursor: pointer;
+	border: 1px solid rgba(10, 10, 10, 0.1);
+	height: 33px;
+	border-radius: 2px;
+	text-align: center;
+	top: 8px;
+	position: relative;
+	left: 20px;
+}
+
+#submit-post {
+	margin-right: 10px;
+	padding: 0px 20px;
+	cursor: pointer;
+	border: 1px solid rgba(10, 10, 10, 0.1);
+	height: 33px;
+	border-radius: 2px;
+	text-align: center;
+	top: 8px;
+	position: relative;
+	left: 20px;
+	background: #55a644;
+}
+
+.yap-here:focus {
+	outline: none;
+}
+
+#triangle {
+	transform: rotate(45deg);
+	width: 28px;
+	height: 28px;
+	z-index: 1;
+	border-bottom: 1px solid #d8d8d8;
+	border-right: 1px solid #d8d8d8;
+	background-color: #fff;
+	display: block;
+	position: absolute;
+	margin-top: -10vh;
+	margin-left: 14px;
+}
+
+.write-post-footer {
+	background: #fff;
+	display: flex;
+	height: 50px;
+	position: relative;
+	margin-top: 12%;
+	transition: margin 0.3s ease-in-out;
+}
+
+.write-post-stuff {
+	display: flex;
+	padding: 15px;
+}
+
+.profile-pic-h5n1 { /* that's the bird flu which just went airbone, thank's rfk jr! */
+	width: 100px;
+	height: 100px;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
 .write-post-card {
 	width: 500px;
 	height: 225px;
-	vertical-align: top;
 }
-#post-text-area {
-	border: 1px solid #d8d8d8;
-	text-indent: 2ch;
-	background: #fff;
-	resize: none;
-	height: 100px;
-	width: 100%;
-	line-height: 1.5;
-	font-size: 16;
-	color: #8b8b8b;
-}
-.post-create-icons {
-	display: flex;
-	justify-content: left;
-	align-items: center;
-	margin-left: 30px;
-	gap: 40px;
-	line-height: 15px;
-	margin-top: 18px;
-}
-.post-create-icons {
-	color: #8b8b8b;
-	font-size: 12px;
-}
-.image-write {
-	width: 25px;
-	width: 25px;
-}
-.image-photo {
-	width: 25px;
-	width: 25px;
-}
-.image-write {
-	background-image: url("/assets/site_images/loogleicon-02.svg");
-	width: 18px;
-	height: 18px;
-	scale: 1.15;
-	display: inline-block;
-	vertical-align: middle;
-	margin-left: 4px;
-	position: relative;
-	top: 5px;
-}
-.image-photo {
-	background-image: url("/assets/site_images/loogleicon-03.svg");
-	width: 18px;
-	height: 18px;
-	scale: 1.15;
-	display: inline-block;
-	vertical-align: middle;
-	margin-left: 9px;
-	position: relative;
-	top: 5px;
-}
-.write-post-icon {
-	border-right: 2px solid #00000017;
-	padding: 0 29px 0 0px;
-}
+
 #triangle-write {
 	transform: rotate(45deg);
 	display: block;
@@ -303,6 +273,103 @@ body {
 	margin-top: -6px;
 	z-index: 0;
 }
+
+#post-text-area {
+	position: relative;
+	border: 1px solid #d8d8d8;
+	text-indent: 2ch;
+	background: #fff;
+	resize: none;
+	height: 100px;
+	width: 100%;
+	line-height: 1.5;
+	font-size: 16;
+	color: #8b8b8b;
+	z-index: 1;
+}
+
+.post-create-icons {
+	display: flex;
+	justify-content: left;
+	align-items: center;
+	margin-left: 30px;
+	gap: 40px;
+	line-height: 15px;
+	margin-top: 18px;
+}
+
+.post-create-icons {
+	color: #8b8b8b;
+	font-size: 12px;
+}
+
+.image-write {
+	width: 25px;
+	width: 25px;
+}
+
+.image-photo {
+	width: 25px;
+	width: 25px;
+}
+
+.image-write {
+	background-image: url("/assets/site_images/loogleicon-02.svg");
+	width: 17px;
+	height: 17px;
+	scale: 1.15;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 4px;
+	position: relative;
+	top: 5px;
+}
+
+.image-photo {
+	background-image: url("/assets/site_images/loogleicon-15.svg");
+	width: 17px;
+	height: 17px;
+	scale: 1.15;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 6.25px;
+	position: relative;
+	top: 5px;
+}
+
+.image-photo-blue {
+	background-image: url("/assets/site_images/loogleicon-04.svg");
+	width: 17px;
+	height: 17px;
+	scale: 1.15;
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 7px;
+	position: relative;
+}
+
+#ue-image-write {
+	width: 25px;
+	height: 25px;
+	top: 5px;
+}
+
+#ue-image-photo {
+	width: 24px;
+	height: 25px;
+	top: 12px;
+}
+
+.ue-attach-photo-row-photo-icon-adjust {
+	position: relative;
+	bottom: 4px;
+}
+
+.write-post-icon {
+	border-right: 2px solid #00000017;
+	padding: 0 29px 0 0px;
+}
+
 .attach-photos-row {
 	display: flex;
 	align-items: center;
@@ -310,12 +377,14 @@ body {
 	margin-top: 10px;
 	margin-left: 3.75em;
 }
+
 .attach {
 	font-weight: bold;
 	font-size: 14px;
 	color: #333;
 	margin-right: 10px;
 }
+
 .photo-icon {
 	display: flex;
 	align-items: center;
@@ -324,35 +393,41 @@ body {
 	font-size: 14px;
 	color: #555;
 }
+
 .icon-row {
 	width: 18px;
 	height: 18px;
 	background-size: contain;
 	background-repeat: no-repeat;
 }
+
 .image-photo {
-	background-image: url("/assets/site_images/loogleicon-04.svg");
 	margin-bottom: 12px;
 	/* idk this icon only needs margin */
 }
+
 .image-link {
 	background-image: url("/assets/site_images/loogleicon-05.svg");
 }
+
 .image-video {
 	background-image: url("/assets/site_images/loogleicon-06.svg");
 }
+
 .upload-area {
 	display: flex;
 	margin-left: 3.75em;
 	margin-top: 10px;
 	align-items: center;
 }
+
 .add-photos {
 	font-weight: bold;
 	font-size: 14px;
 	color: #333;
 	margin-right: 10px;
 }
+
 .upload-button {
 	background: #fff;
 	width: 250px;
@@ -362,28 +437,11 @@ body {
 	font-weight: bold;
 	margin-top: 15px;
 }
-body {
-	background: #e5e5e5;
-	margin: 0;
-	padding: 0;
-	font-family: 'Roboto', sans-serif;
-}
-.container {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: flex-start;
-	padding: 0 10px;
-	margin: 0 auto;
-	max-width: 2000px;
-	width: 100%;
-}
-.col-md-4,.col-sm-6,.col-xs-12 {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	margin: 10px;
-	width: 100%;
-}
+
+/* end */
+
+/* posts css resposive section */
+
 @media (max-width: 575px) {
 	.col-xs-12 {
 		width: 100%;
@@ -399,8 +457,6 @@ body {
 		width: 500px;
 	}
 }
-.post-image {
-	width: 100%;
-	margin-top: 10px;
-	margin-bottom: 15px;
-}
+
+/* end */
+
