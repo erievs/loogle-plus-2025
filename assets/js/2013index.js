@@ -358,7 +358,7 @@ $(document).ready(function() {
 				console.error('AJAX Error:', error);
 				$('#submit-post').prop('disabled', false);
 			}
-			
+
 		});
 
 	});
@@ -559,8 +559,7 @@ $(document).ready(function() {
 
 
 	$('#submit-post').on('click', function() {
-
-
+		SubmitPost();
 	});
 
 	// end
