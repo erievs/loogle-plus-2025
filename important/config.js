@@ -1,4 +1,4 @@
-async function LoadConfig() {
+async function loadConfig() {
     try {
 
         const protocol = window.location.protocol === 'https:' ? 'https://' : 'http://';
@@ -30,7 +30,7 @@ async function LoadConfig() {
     }
 }
 
-LoadConfig().then(config => {
+loadConfig().then(config => {
     console.log("Loaded Site URL:", config.siteUrl);
     console.log("Loaded Timezone:", config.timezone);
 });
