@@ -347,7 +347,10 @@ $(document).ready(function() {
                     RemoveNearestCol(e);
 
 				} else {
-					alert('Error: ' + response.message);
+
+					ClearAlert();
+					SetAlert("Failed to delete your post, " + response.message, "danger");
+
 				}
 			},
 
