@@ -13,13 +13,14 @@ class PostAPI
         $this->pdo = $pdo;
     }
 
-    public function plusOnePost(array $data): array
+    public function PlusOnePost(array $data): array
     {
         $username = $data['username'];
         $password = $data['password'];
         $postId = $data['post_id'];
 
-        $authResponse = $this->authenticateUser($username, $password);
+        $authResponse = $this-> AuthenticateUser($username, $password);
+        
         if ($authResponse['status'] !== 'success') {
             return $authResponse;
         }
@@ -76,7 +77,7 @@ class PostAPI
         }
     }
 
-    private function authenticateUser(string $username, string $password): array
+    function AuthenticateUser(string $username, string $password): array
     {
         try {
             $stmt = $this->pdo->prepare("SELECT * FROM accounts WHERE username = :username");
@@ -114,7 +115,7 @@ if ($requestData === null) {
 }
 
 $authAPI = new PostAPI($pdo);
-$response = $authAPI->plusOnePost($requestData);
+$response = $authAPI->PlusOnePost($requestData);
 
 echo json_encode($response);
 

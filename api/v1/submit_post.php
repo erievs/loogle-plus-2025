@@ -31,8 +31,7 @@ class PostAPI
         if (empty($username) || (empty($content) && empty($image_url))) {
             return $this->response('error', 'Username and either content or image are required.');
         }
-             
-
+    
         $mentionedUsernames = $this->getMentionedUsernames($content);
 
         try {
@@ -116,7 +115,7 @@ class PostAPI
                 ]);
             }
         } catch (PDOException $e) {
-            // Handle exception if needed
+
         }
     }
 
@@ -157,7 +156,6 @@ class PostAPI
     }
 }
 
-// Handle request and pass it to PostAPI
 $requestData = $_POST;
 
 $authAPI = new PostAPI($pdo);

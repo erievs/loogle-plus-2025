@@ -1,8 +1,8 @@
 <?php
 
-header('Content-Type: application/rss+xml; charset=UTF-8');  
+header('Content-Type: application/rss+xml; charset=UTF-8');
 
-header('Content-Disposition: attachment; filename="feed.xml"'); 
+header('Content-Disposition: attachment; filename="feed.xml"');
 
 require_once '../../important/config.php';
 
@@ -15,14 +15,15 @@ class PostAPI
         $this->pdo = $pdo;
     }
 
-    public function fetchPosts(): array
+    public function FetchPosts(): array
     {
         try {
+
             $stmt = $this->pdo->prepare("SELECT * FROM posts ORDER BY created_at DESC");
             $stmt->execute();
+            
             $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $response = [];
             foreach ($posts as &$post) {
                 $postId = $post['id'];
                 $commentStmt = $this->pdo->prepare("SELECT * FROM comments WHERE post_id = :post_id ORDER BY created_at DESC");
@@ -32,15 +33,16 @@ class PostAPI
                 $post['comments'] = $comments;
             }
 
-            return $posts; 
+            return $posts;
         } catch (PDOException $e) {
-            return []; 
+            return [];
         }
     }
 }
 
 $api = new PostAPI($pdo);
-$posts = $api->fetchPosts();
+
+$posts = $api-> FetchPosts();
 
 $rssFeed = '<?xml version="1.0" encoding="UTF-8"?>';
 $rssFeed .= '<rss version="2.0">';

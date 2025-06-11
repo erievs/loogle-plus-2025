@@ -16,7 +16,7 @@ class PostAPI
         $this->pdo = $pdo;
     }
 
-    public function fetchPosts(array $params): array
+    public function FetchPosts(array $params): array
     {
         $community = isset($params['community']) ? $params['community'] : null;
         $page = isset($params['page']) && is_numeric($params['page']) && (int)$params['page'] > 0 
@@ -37,7 +37,7 @@ class PostAPI
     
         try {
 
-            $pagination = $this->getPagination($page, $pageSize, $searchQuery, $community);
+            $pagination = $this->GetPagination($page, $pageSize, $searchQuery, $community);
 
             if ($pagination['current_page'] > $pagination['total_pages']) {
                 return $this->response('error', 'Already at the highest page', []);
@@ -96,7 +96,7 @@ class PostAPI
         }
     }
     
-    private function getPagination(int $page, int $pageSize, ?string $searchQuery, ?string $community): array
+    private function GetPagination(int $page, int $pageSize, ?string $searchQuery, ?string $community): array
     {
         $sql = "SELECT COUNT(*) FROM posts";
         $queryParams = [];
@@ -133,7 +133,7 @@ class PostAPI
         return $pagination;
     }
 
-    private function generatePageUrl(int $page, int $pageSize, ?string $community, ?string $searchQuery): string
+    private function GeneratePageUrl(int $page, int $pageSize, ?string $community, ?string $searchQuery): string
     {
         $url = SITE_URL . "/api/v1/fetch_posts.php?page=" . $page . "&page_size=" . $pageSize;
         if ($community) {
@@ -145,7 +145,7 @@ class PostAPI
         return $url;
     }
 
-    private function response(string $status, string $message, array $data = []): array
+    private function Response(string $status, string $message, array $data = []): array
     {
         return [
             'status' => $status,
@@ -158,7 +158,7 @@ class PostAPI
 $requestData = $_GET; 
 
 $api = new PostAPI($pdo);
-$response = $api->fetchPosts($requestData);
+$response = $api-> FetchPosts($requestData);
 
 echo json_encode($response);
 

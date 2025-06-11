@@ -2,11 +2,18 @@
 
 $defaultProfilePicture = '../../assets/site_images/default_profile_picture.jpg';
 
-function serveImage($imagePath, $imageType) {
-    header('Content-Type: ' . $imageType);
-    readfile($imagePath);
+function SendImage($imagePath, $imageType) {
+
+
+    header(header: 'Content-Type: ' . $imageType);
+    
+    readfile(filename: $imagePath);
+
     exit();
+
 }
+
+// ~~uh maybe we should compress or something idk~~
 
 if (isset($_GET['username'])) {
 
@@ -20,20 +27,20 @@ if (isset($_GET['username'])) {
         if (file_exists($profilePicturePath)) {
 
             if ($format == 'webp') {
-                serveImage($profilePicturePath, 'image/webp');
+                SendImage($profilePicturePath, 'image/webp');
             } elseif ($format == 'png') {
-                serveImage($profilePicturePath, 'image/png');
+                SendImage($profilePicturePath, 'image/png');
             } elseif ($format == 'jpeg' || $format == 'jpg') {
-                serveImage($profilePicturePath, 'image/jpeg');
+                SendImage($profilePicturePath, 'image/jpeg');
             }
         }
     }
 
-    serveImage($defaultProfilePicture, 'image/jpeg');
+    SendImage($defaultProfilePicture, 'image/jpeg');
 
 } else {
 
-    serveImage($defaultProfilePicture, 'image/jpeg');
+    SendImage($defaultProfilePicture, 'image/jpeg');
 }
 
 ?>

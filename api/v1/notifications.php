@@ -13,27 +13,27 @@ class NotificationAPI
         $this->pdo = $pdo;
     }
 
-    public function getNotifications(string $username, string $request): array
+    public function GetNotifications(string $username, string $request): array
     {
         switch ($request) {
             case 'unread_count':
-                return $this->getUnreadCount($username);
+                return $this->GetUnreadCount($username);
             case 'unread_data':
-                return $this->getUnreadNotifications($username);
+                return $this->GetUnreadNotifications($username);
             case 'all_count':
-                return $this->getAllCount($username);
+                return $this->GetAllCount($username);
             case 'all_data':
-                return $this->getAllNotifications($username);
+                return $this->GetAllNotifications($username);
             case 'read_notification':
-                return $this->markNotificationAsRead($username, $_GET['id']);
+                return $this->MarkNotificationAsRead($username, $_GET['id']);
             case 'read_all_notifications':
-                return $this->markAllNotificationsAsRead($username);
+                return $this->MarkAllNotificationsAsRead($username);
             default:
                 return $this->response('error', 'Invalid request type.');
         }
     }
 
-    private function getUnreadCount(string $username): array
+    function GetUnreadCount(string $username): array
     {
         try {
             $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM notifications WHERE receiver = :username AND status = 'unread'");
@@ -45,7 +45,7 @@ class NotificationAPI
         }
     }
 
-    private function getUnreadNotifications(string $username): array
+    function GetUnreadNotifications(string $username): array
     {
         try {
             $stmt = $this->pdo->prepare("SELECT * FROM notifications WHERE receiver = :username AND status = 'unread'");
@@ -57,7 +57,7 @@ class NotificationAPI
         }
     }
 
-    private function getAllCount(string $username): array
+    function GetAllCount(string $username): array
     {
         try {
     
@@ -70,7 +70,7 @@ class NotificationAPI
         }
     }
 
-    private function getAllNotifications(string $username): array
+    function GetAllNotifications(string $username): array
     {
         try {
     
@@ -83,7 +83,7 @@ class NotificationAPI
         }
     }
 
-    private function markNotificationAsRead(string $username, $notificationId): array
+    function MarkNotificationAsRead(string $username, $notificationId): array
     {
         if (empty($notificationId)) {
             return $this->response('error', 'Notification ID is required.');
@@ -108,7 +108,7 @@ class NotificationAPI
         }
     }
 
-    private function markAllNotificationsAsRead(string $username): array
+    function MarkAllNotificationsAsRead(string $username): array
     {
         try {
 
@@ -121,7 +121,7 @@ class NotificationAPI
         }
     }
 
-    private function response(string $status, string $message, array $data = []): array
+    function response(string $status, string $message, array $data = []): array
     {
         return [
             'status' => $status,
@@ -132,13 +132,15 @@ class NotificationAPI
 }
 
 $requestData = $_GET;
+
 if (!isset($requestData['username']) || !isset($requestData['request'])) {
     echo json_encode(['status' => 'error', 'message' => 'Missing required parameters.']);
     exit();
 }
 
 $notificationAPI = new NotificationAPI($pdo);
-$response = $notificationAPI->getNotifications($requestData['username'], $requestData['request']);
+
+$response = $notificationAPI-> GetNotifications($requestData['username'], $requestData['request']);
 
 echo json_encode($response);
 

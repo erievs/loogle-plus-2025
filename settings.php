@@ -1,50 +1,53 @@
 <?php
-   if (session_status() == PHP_SESSION_NONE) {
-       session_start();
-   }
-   
-   if (!defined('DEPENDENCIES_INCLUDED')) {
-       include './assets/php/dependencies.php';
-       define('DEPENDENCIES_INCLUDED', true); 
-   }
-   
-   include './account/check_login.php';
-   
-   $username = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_COOKIE['username']) ? $_COOKIE['username'] : 'Not logged in');
-   $password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOKIE['password']) ? $_COOKIE['password'] : 'Not available');
-   
-   ?>
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!defined('DEPENDENCIES_INCLUDED')) {
+    include './assets/php/dependencies.php';
+    define('DEPENDENCIES_INCLUDED', true);
+}
+
+include './account/check_login.php';
+
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : (isset($_COOKIE['username']) ? $_COOKIE['username'] : 'Not logged in');
+$password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOKIE['password']) ? $_COOKIE['password'] : 'Not available');
+
+?>
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Loogle+</title>
-      <link href="/assets/css/2013settings.css" rel="stylesheet">
-      <script src="/assets/js/2013settings.js"></script>
-   </head>
-   <body>
 
-         <?php include './assets/php/header.php'; ?>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loogle+</title>
+    <link href="/assets/css/2013settings.css" rel="stylesheet">
+    <script src="/assets/js/2013settings.js"></script>
+</head>
 
-         <div class="main-wrapper">
-            <div class="settings-container">
-                <div class="settings-items">
+<body>
 
-                    <div class="settings-item">
-                        <b>Site Settings</b>
+    <?php include './assets/php/header.php'; ?>
 
-                        <br>
+    <div class="main-wrapper">
+        <div class="settings-container">
+            <div class="settings-items">
 
-                        <label id="item-check">
-                            <input type="checkbox" id="hide-alerts-checkbox"> Hide Alerts
-                        </label>
+                <div class="settings-item">
+                    <b>Site Settings</b>
 
-                    </div>
+                    <br>
+
+                    <label id="item-check">
+                        <input type="checkbox" id="hide-alerts-checkbox"> Hide Alerts
+                    </label>
 
                 </div>
+
             </div>
         </div>
+    </div>
 
-   </body>
+</body>
+
 </html>
