@@ -694,6 +694,37 @@ $(document).ready(function() {
 						</div>
 						<div class="post-body">${FormatText(response.data.content)}</div>
 						<img class="post-image" ${response.data.image_url ? `src="${response.data.image_url}"` : ''}>
+						
+						<div class="comment-area">
+						
+							${response.comments && response.comments.length > 0
+								? post.comments
+									.slice()
+									.sort(function(a, b) {
+										return new Date(a.created_at) - new Date(b.created_at);
+									})
+									.map(comment => {
+										const commentDate = new Date(comment.created_at);
+										const commentFormattedDate = commentDate.toLocaleDateString(undefined, options);
+										return `
+											<div class="comment">
+												<img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${comment.username}" alt="${comment.username} profile picture" class="comment-pfp" />
+												<div class="comment-main">
+													<div class="comment-header">
+														<strong class="comment-username">${comment.username}</strong> 
+														<span class="comment-date">${commentFormattedDate}</span>
+													</div>
+													<div class="comment-body">
+														${FormatText(comment.content)}
+													</div>
+												</div>
+											</div>
+										`;
+									}).join('')
+								: ''
+							}
+							
+						</div>
 
 						<div class="comment-input-container" >
 							<textarea type="text" placeholder="Add a comment..." class="comment-input" spellcheck="false" data-gramm="false"></textarea>

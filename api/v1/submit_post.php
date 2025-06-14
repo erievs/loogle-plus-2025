@@ -80,6 +80,7 @@ class PostAPI
                 'youtube_video_url' => $youtubeVideoUrl,
                 'community' => $community,
                 'created_at' => date('Y-m-d H:i:s'),
+                'comment' => []
             ]);
         } catch (PDOException $e) {
             return $this->response('error', 'Database error: ' . $e->getMessage());
