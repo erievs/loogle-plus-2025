@@ -39,8 +39,12 @@ class PostAPI
 
             $pagination = $this->GetPagination($page, $pageSize, $searchQuery, $community);
 
-            if ($pagination['current_page'] > $pagination['total_pages']) {
+            if ($pagination['current_page'] > $pagination['total_pages'] && $searchQuery == '') {
                 return $this->response('error', 'Already at the highest page', []);
+            }
+
+            if ($pagination['current_page'] > $pagination['total_pages'] && $searchQuery != '') {
+                return $this->response('404', 'No results found', []);
             }
     
             $sql = "SELECT * FROM posts";

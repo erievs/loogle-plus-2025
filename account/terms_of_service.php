@@ -5,6 +5,8 @@ include '../assets/php/dependencies.php';
 <!DOCTYPE html>
 <html class="google-js" lang="en">
   <head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
  
     </script>
@@ -47,9 +49,10 @@ include '../assets/php/dependencies.php';
       </div>
       <div class="maia-article" role="article">
       <h1>Loogle Terms of Service</h1>
-        <p>Last modified: December 29, 2024</p>
+        <p>Last modified: 14th of June, 2025</p>
         <h2>Welcome to Loogle!</h2>
-        <p>Thanks for using our products and services (“Services”). The Services are provided by Loogle Inc. (“Loogle”), located at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.</p>
+        <p>Thanks for using our products and services (“Services”). The Services are provided by Loogle. (“Loogle”), we are in United States, and are not affiliated with Google or any other company in any way.</p>
+        <p>Loogle Plus and Loogle Services are simply fan recreations made only with looking at images, we do not use any archives for the main site. We only use archives in part (but not fully) for account frontend.</p>
         <p>By using our Services, you are agreeing to these terms. Please read them carefully.</p>
         <p>Our Services are diverse, so sometimes additional terms or product requirements (including age requirements) may apply. Additional terms will be available with the relevant Services, and those additional terms become part of your agreement with us if you use those Services.</p>
         <h2 id="toc-services">Using our Services</h2>
@@ -61,7 +64,7 @@ include '../assets/php/dependencies.php';
         <h2 id="toc-protection">Privacy and Copyright Protection</h2>
         <p>Loogle’s <a href="privacy_policy.php">privacy policies</a> explain how we treat your personal data and protect your privacy when you use our Services. By using our Services, you agree that Loogle can use such data in accordance with our privacy policies.</p>
         <p>We respond to notices of alleged copyright infringement and terminate accounts of repeat infringers according to the process set out in the U.S. Digital Millennium Copyright Act.</p>
-        <p>If you think somebody is violating your copyrights and want to notify us, you can find information about submitting notices and Loogle’s policy for responding to notices <a href="https://support.loogle.com/bin/static.py?hl=en&amp;ts=1114905&amp;page=ts.cs">in our Help Center</a>.</p>
+        <p>If you think somebody is violating your copyrights and want to notify us, you can find information about submitting notices and Loogle’s policy for responding to notices <a href="privacy_policy.php">in our Privacy Policy</a>.</p>
         <h2 id="toc-content">Your Content in our Services</h2>
         <p>Some of our Services allow you to submit content. You retain ownership of any intellectual property rights you hold in that content. In short, what belongs to you stays yours.</p>
         <p>When you upload or otherwise submit content to our Services, you give Loogle (and those we work with) a worldwide license to use, host, store, reproduce, modify, create derivative works, communicate, publish, publicly perform, publicly display, and distribute such content. The rights you grant in this license are for the limited purpose of operating, promoting, and improving our Services, and to develop new ones. This license continues even if you stop using our Services. Some Services may offer you ways to access and remove content provided to that Service. Make sure you have the necessary rights to grant us this license for any content that you submit to our Services.</p>

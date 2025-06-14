@@ -19,10 +19,10 @@ if (isset($_GET['username'])) {
 
     $username = basename($_GET['username']);  
 
-    $formats = ['webp', 'png', 'jpeg', 'jpg'];
+    $formats = ['webp', 'png', 'jpeg', 'jpg', 'gif'];
 
     foreach ($formats as $format) {
-        $profilePicturePath = '../assets/profile_pictures/' . $username . '.' . $format;
+        $profilePicturePath = '../../assets/profile_pictures/' . $username . '.' . $format;
 
         if (file_exists($profilePicturePath)) {
 
@@ -32,6 +32,8 @@ if (isset($_GET['username'])) {
                 SendImage($profilePicturePath, 'image/png');
             } elseif ($format == 'jpeg' || $format == 'jpg') {
                 SendImage($profilePicturePath, 'image/jpeg');
+            } elseif ($format == 'gif') {
+                SendImage($profilePicturePath, 'image/gif');
             }
         }
     }

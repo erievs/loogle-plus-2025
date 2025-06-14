@@ -55,7 +55,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $code = $_POST['revoke_code'];
         $stmt = $pdo->prepare("DELETE FROM registration_codes WHERE code = :code");
         $stmt->execute(['code' => $code]);
+    } elseif (isset($_POST['reset_password'])) {
+        
+        $targetUsername = $_POST['reset_username'];
+        $newPassword = $_POST['new_password'];
+
+        if (!empty($targetUsername) && !empty($newPassword)) {
+            $hashedNewPassword = password_hash($newPassword, PASSWORD_BCRYPT);
+            $stmt = $pdo->prepare("UPDATE accounts SET password = :password WHERE username = :username");
+            $stmt->execute(['password' => $hashedNewPassword, 'username' => $targetUsername]);
+        }
     }
+
 }
 
 $stmt = $pdo->query("SELECT username, ban_status, ban_reason FROM accounts");
@@ -123,6 +134,24 @@ $codes = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 </form>
             </div>
         </div>
+
+        <div class="card mt-4">
+            <div class="card-header" style="margin-bottom: 10px; font-size: 20px;">Reset User Password</div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="reset_username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="reset_username" name="reset_username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="new_password" class="form-label">New Password</label>
+                        <input type="text" class="form-control" id="new_password" name="new_password" required>
+                    </div>
+                    <button type="submit" name="reset_password" class="btn btn-warning">Reset Password</button>
+                </form>
+            </div>
+        </div>
+
 
         <div class="card mt-4">
             <div class="card-header" style="margin-bottom: 10px; font-size: 20px;">Current Users</div>

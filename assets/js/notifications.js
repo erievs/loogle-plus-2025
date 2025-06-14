@@ -4,6 +4,8 @@ $(document).ready(function() {
 
             var config = await loadConfig();
             var siteUrl = config.siteUrl;
+            
+            var redSquare = $('.red-square');
 
             console.log("Current username:", username);
 
@@ -27,6 +29,14 @@ $(document).ready(function() {
             if (response.status === 'success') {
 
                 $('#notifications-count').text(response.data.count);
+
+
+                if (response.data.count === 0) {
+                    redSquare.addClass('red-square-zero');
+                } else {
+                    redSquare.removeClass('red-square-zero');
+                }
+
             } else {
 
                 console.error("Failed to fetch notifications:", response.message);
@@ -72,6 +82,7 @@ $(document).ready(function () {
             if (response.status === 'success') {
 
                 $('#notifications-count').text(response.data.notifications.length);
+
 
                 var notifications = response.data.notifications;
                 var mentionsContainer = $('.mentions-container');
@@ -144,7 +155,7 @@ $(document).ready(function () {
 
     updateNotifications();
 
-    setInterval(updateNotifications, 30000);
+    setInterval(updateNotifications, 20000);
 });
 
 $(document).ready(function () {

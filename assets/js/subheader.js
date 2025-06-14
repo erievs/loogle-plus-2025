@@ -18,6 +18,12 @@ $(document).ready(function() {
         $('#family-item').show();
         $('#friends-item').show();
         $('#more-item').show();
+    }
+    else if (currentPage === 'search.php') {
+        $('#all-item').addClass('active').show();
+        $('#family-item').show();
+        $('#friends-item').show();
+        $('#more-item').show();
     } else if (currentPage === 'about.php') {
         $('#about-item').addClass('active').show();
         $('#posts-item').show();
@@ -58,4 +64,9 @@ $(document).ready(function () {
             $("#sidebar-container").removeClass("open");
         }
     });
+});
+
+$('#profile-toggle').on('click', function (e) {
+    e.preventDefault();
+    $('#profile-dropdown').toggle();
 });

@@ -20,6 +20,7 @@ class PostAPI
 
         $content = $postData['content'] ?? null; 
 
+
         $siteEmbedUrl = $postData['site_embed_url'] ?? null;
 
         $imageUrl = isset($_FILES['image']) ? $this-> HandleImageUpload() : null; 

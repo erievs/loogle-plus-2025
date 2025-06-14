@@ -3,6 +3,22 @@ include '../assets/php/dependencies.php';
 include '../important/config.php';
 ?>
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+
+<script>
+
+    (function () {
+        var baseUrl = window.location.protocol + '//' + window.location.hostname;
+        if (window.location.port) {
+            baseUrl += ':' + window.location.port;
+        }
+
+        var icon = document.querySelector("link[rel~='icon']");
+        if (icon) {
+            icon.href = baseUrl + "/assets/site_images/favicon.png";
+        }
+    })();
+</script>
 
 <title>Account Managment</title>
 
@@ -1972,7 +1988,7 @@ include '../important/config.php';
 
 <div class="Loogle-header-bar">
   <div class="header content clearfix">
-  <img class="logo" src="../assets/accounts/ui/loogle_logo.png" alt="Loogle">
+  <img class="logo" style="height: 50px" src="../assets/site_images/logo.png" alt="Loogle">
   <span class="signin-button">
   <a id="link-signin" class="g-button" href="login.php">Sign in</a>
   </span>
@@ -2049,7 +2065,7 @@ include '../important/config.php';
   <h2>
   Your Loogle Account is more than just Search.
 </h2>
-  <p class="greytext">Talk, chat, share, schedule, store, organize, collaborate, discover, and create. Use Loogle products from Gmail to Loogle+ to YouTube, view your search history, all with one username and password, all backed up all the time and easy to find at (you guessed it) Loogle.com.</p>
+  <p class="greytext">Talk, chat, share, schedule, store, organize, collaborate, discover, and create. Use Loogle products from Gmail to Loogle+ to LiveLeak (No Gore Allowed, Not Realted To THAT LiveLeak), view your search history, all with one username and password, all backed up all the time and easy to find at (you guessed it) Loogle.com.</p>
   </div>
 </div>
 <div class="benefit">

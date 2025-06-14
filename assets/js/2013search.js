@@ -119,6 +119,7 @@ $(document).ready(function() {
         }
     }
 
+	
 	function FormatText(text) {
 
 		text = $('<div>').text(text).html();
@@ -164,6 +165,24 @@ $(document).ready(function() {
 		return text.replace(/\n/g, "<br>");
 	}
 
+	// another thing I found online
+	var GetUrlParameter = function GetUrlParameter(sParam) {
+		var sPageURL = window.location.search.substring(1),
+			sURLVariables = sPageURL.split('&'),
+			sParameterName,
+			i;
+
+		for (i = 0; i < sURLVariables.length; i++) {
+			sParameterName = sURLVariables[i].split('=');
+
+			if (sParameterName[0] === sParam) {
+				return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+			}
+		}
+		return false;
+	};
+
+
 	// alert stuff (I wish I could have them in alert_handler but too pain in the as to figure out)
 
     function ClearAlert() {
@@ -198,9 +217,48 @@ $(document).ready(function() {
 		$(".site-alert").html(alert_html).fadeIn(200);
 		
     }
-	
+		
+	function SetSearchAlert(alert_message) {
+
+
+		// \d starts a dimiss link \de ends a dismis link
+		
+		alert_message = alert_message
+        .replace(/\n/g, '<br>')
+        .replace(/\\d(.*?)\\de/g, function (_, text) {
+            return '<a href="#" class="dismiss-alert-linkstyle" data-dismiss="alert" aria-label="Close">' + text + '</a>';
+        });
+
+
+		var alert_html = `
+        <div class="alert alert-info alert-dismissible search-alert" role="alert">
+            <p class="alert-search-text" >${alert_message}</p>
+        </div>`;
+
+		$(".container").prepend(alert_html).fadeIn(200);
+		
+    }
 	// end
 
+
+	// search ui stuff
+
+	if(GetUrlParameter("query") != '') { 
+		SetSearchAlert(GetUrlParameter("query"));
+	}
+
+	$('#search-box').attr('placeholder', GetUrlParameter("query")); 
+
+	function CreateNoResultsFound() {
+
+
+		console.log("men");
+
+		SetAlert("No results found. \\dDismiss\\de", "warning")
+
+	}
+
+	// end
 	
     // fetching posts
 
@@ -223,11 +281,16 @@ $(document).ready(function() {
 			type: 'GET',
 			data: {
 				page,
-				page_size: pageSize
+				page_size: pageSize,
+				search: GetUrlParameter("query")
 			},
             
 			success: function(response) {
-		
+				
+				if(response.status === "404") {
+					CreateNoResultsFound();
+				}
+
 				if (response.status === 'success' && response.data.posts.length > 0) {
 					
 					var posts = response.data.posts;
@@ -268,30 +331,30 @@ $(document).ready(function() {
 									<div class="comment-area">
 									
 										${post.comments && post.comments.length > 0
-										? post.comments
-											.slice()
-											.sort(function(a, b) {
-												return new Date(a.created_at) - new Date(b.created_at);
-											})
-											.map(comment => {
-												const commentDate = new Date(comment.created_at);
-												const commentFormattedDate = commentDate.toLocaleDateString(undefined, options);
-												return `
-													<div class="comment">
-														<img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${comment.username}" alt="${comment.username} profile picture" class="comment-pfp" />
-														<div class="comment-main">
-															<div class="comment-header">
-																<strong class="comment-username">${comment.username}</strong> 
-																<span class="comment-date">${commentFormattedDate}</span>
-															</div>
-															<div class="comment-body">
-																${FormatText(comment.content)}
+											? post.comments
+												.slice()
+												.sort(function(a, b) {
+													return new Date(a.created_at) - new Date(b.created_at);
+												})
+												.map(comment => {
+													const commentDate = new Date(comment.created_at);
+													const commentFormattedDate = commentDate.toLocaleDateString(undefined, options);
+													return `
+														<div class="comment">
+															<img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${comment.username}" alt="${comment.username} profile picture" class="comment-pfp" />
+															<div class="comment-main">
+																<div class="comment-header">
+																	<strong class="comment-username">${comment.username}</strong> 
+																	<span class="comment-date">${commentFormattedDate}</span>
+																</div>
+																<div class="comment-body">
+																	${FormatText(comment.content)}
+																</div>
 															</div>
 														</div>
-													</div>
-												`;
-											}).join('')
-										: ''
+													`;
+												}).join('')
+											: ''
 										}
 										
 									</div>
@@ -307,7 +370,7 @@ $(document).ready(function() {
 											</div>
 
 										</div>
-
+						
                                 </div>
                             </div>
 
@@ -380,8 +443,7 @@ $(document).ready(function() {
 													`;
 												}).join('')
 											: ''
-											}
-
+										}
 
 										</div>
 
@@ -855,7 +917,7 @@ $(document).ready(function() {
 				SetAlert('There was an upload error. \nMake sure to upload a JPG, GIF, WEBP, or PNG file and try again. \\dDismiss\\de', 'warning');
 				return;
 			}
-			
+
 			formData.append('image', imageFile);
 		}
 

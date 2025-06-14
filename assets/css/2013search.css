@@ -610,6 +610,28 @@ body {
 
 /* end */
 
+/* search stuff */
+
+.search-alert {
+	width: 100%;
+	height: 75px;
+	margin-right: 15px;
+	margin-left: 15px;
+	background-color: #2e6cfb !important;
+	border-radius: 0px;
+}
+
+.alert-search-text {
+ 	line-height: 40px;
+	font-size: 22px;
+}
+
+.form-control::placeholder {
+  color: #404040 !important;
+}
+
+/* end */
+
 /* posts css resposive section */
 
 @media (max-width: 575px) {

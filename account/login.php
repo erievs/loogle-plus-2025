@@ -3,10 +3,23 @@ include '../assets/php/dependencies.php';
 ?>
 
 <!DOCTYPE html>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
   <meta charset="utf-8">
-  <link rel="icon" 
-      type="image/png" 
-      href="../assets/important-images/fav.png" />
+
+  <script>
+      (function () {
+          var baseUrl = window.location.protocol + '//' + window.location.hostname;
+          if (window.location.port) {
+              baseUrl += ':' + window.location.port;
+          }
+
+          var icon = document.querySelector("link[rel~='icon']");
+          if (icon) {
+              icon.href = baseUrl + "/assets/site_images/favicon.png";
+          }
+      })();
+  </script>
 
     <title>Loogle Accounts</title>
 
@@ -1372,7 +1385,7 @@ include '../assets/php/dependencies.php';
   <div class="wrapper">
   <div class="google-header-bar">
   <div class="header content clearfix">
-  <img class="logo" src="../assets/accounts/ui/loogle_logo.png" alt="Loogles">
+  <img class="logo" style="height: 50px" src="../assets/site_images/logo.png" alt="Loogle">
 
   <span class="signup-button">
   <a id="link-signup" class="g-button g-button-red" href="register.php">
@@ -1420,7 +1433,7 @@ include '../assets/php/dependencies.php';
 <h1>One password. All of Loogle.</h1>
 <p>Want to enjoy the best of Loogle? Just stay signed in. One username 
 and password is all you need to unlock more features from services you 
-use every day, like Gmail, Maps, Loogle+, and YouTube.</p>
+use every day, like Gmail, Maps, Loogle+, and (No Gore Allowed, Not Realted To THAT LiveLeak).</p>
   </div>
   </div>
 <div class="google-footer-bar">

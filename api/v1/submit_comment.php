@@ -54,6 +54,7 @@ class CommentAPI
                 'content' => $content,
                 'created_at' => date('Y-m-d H:i:s'),
             ]);
+            
         } catch (PDOException $e) {
             return $this->response('error', 'Database error: ' . $e->getMessage());
         }
@@ -128,7 +129,8 @@ if ($requestData === null) {
 }
 
 $commentAPI = new CommentAPI($pdo);
-$response = $commentAPI->submitComment($requestData);
+
+$response = $commentAPI-> submitComment($requestData);
 
 echo json_encode($response);
 
