@@ -380,7 +380,7 @@ $(document).ready(function() {
 													`;
 												}).join('')
 											: ''
-											}
+										}
 
 
 										</div>
@@ -694,6 +694,19 @@ $(document).ready(function() {
 						</div>
 						<div class="post-body">${FormatText(response.data.content)}</div>
 						<img class="post-image" ${response.data.image_url ? `src="${response.data.image_url}"` : ''}>
+
+						<div class="comment-input-container" >
+							<textarea type="text" placeholder="Add a comment..." class="comment-input" spellcheck="false" data-gramm="false"></textarea>
+							
+							<img class="submit-comment-pfp" style="display: none" src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${GetCookie("username")}">
+
+							<div class="comment-buttons">
+								<button class="submit-comment-button">Post comment</button>
+								<button class="cancel-comment-button">Cancel</button>
+							</div>
+
+						</div>
+						
 					</div>
 				</div>
 			`;
