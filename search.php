@@ -23,6 +23,10 @@ $password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOK
    <meta charset="UTF-8">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Loogle+</title>
+
+   <script src="/assets/js/masonry.js"></script>
+   <script src="/assets/js/imagesloaded.js"></script>
+
    <link href="/assets/css/2013search.css" rel="stylesheet">
    <script src="/assets/js/2013search.js"></script>
    
@@ -33,7 +37,7 @@ $password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOK
 
    <?php include './assets/php/header.php'; ?>
 
-   <div class="container post-container">
+   <div class="container">
       <div class="write-post-expanded" id="write-post-expanded">
 
          <div class="write-post-stuff">
@@ -90,11 +94,7 @@ $password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOK
    </div>
 
 
-   <div class="row">
-
-
-
-      <div class="col-md-4 col-sm-6 col-xs-12">
+   <div class="posts-container">
 
          <div class="write-post-card" id="write-post-card">
 
@@ -119,8 +119,6 @@ $password = isset($_SESSION['password']) ? $_SESSION['password'] : (isset($_COOK
 
 
       </div>
-
-   </div>
 
    </div>
 

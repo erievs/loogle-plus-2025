@@ -17,19 +17,10 @@ body {
 	width: 100%;
 }
 
-.row {
-	display: flex;
-	flex-wrap: wrap;
+.posts-container {
 	width: 100%;
-	justify-content: center;
-}
-
-.col-md-4,.col-sm-6,.col-xs-12 {
-	display: flex;
-	flex-direction: column;
-	justify-content: flex-start;
-	margin: 10px;
-	width: 100%;
+	margin: 0 auto;    /* centers horizontally */
+	position: relative; /* needed for Masonry */
 }
 
 
@@ -306,6 +297,20 @@ body {
 	position: absolute; 
 	margin-right: 452px;
 	border-radius: 5%;
+}
+
+.comment-area:empty {
+    display: none;
+}
+
+.edit-post-textarea {
+	border: none;
+	outline: none;
+}
+
+.edit-post-textarea:focus {
+	border: none;
+	outline: none;
 }
 
 /* end */

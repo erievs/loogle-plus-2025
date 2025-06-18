@@ -37,6 +37,7 @@ $(document).ready(function() {
 	var siteUrl = protocol + hostname + port;
 
 
+
 	// some thing I found off of w3 schools works well enough
     function GetCookie(cname) {
         let name = cname + "=";
@@ -53,6 +54,21 @@ $(document).ready(function() {
         }
         return "";
     }
+	
+
+	// we must uh declare this before deleting posts
+
+	var $grid = $('.posts-container').masonry({
+		itemSelector: '.post-card, .write-post-card',
+		columnWidth: '.post-card',
+		gutter: 20,         
+		fitWidth: true
+	});
+
+	$grid.imagesLoaded().done(function() {
+		$grid.masonry('layout');
+	});
+
 
     function GetNearestPostId(e) {
         var x = e.pageX;
@@ -91,7 +107,7 @@ $(document).ready(function() {
         var nearest = null;
         var minDistance = Infinity;
 
-        $('.col-md-4.col-sm-6.col-xs-12').each(function () {
+        $('.post-card').each(function () {
             var $el = $(this);
             var offset = $el.offset();
             var width = $el.outerWidth();
@@ -112,14 +128,32 @@ $(document).ready(function() {
 
         if (nearest) {
 			
-			nearest.fadeOut(300, function(){ 
-				nearest.remove();
-			});
+			$grid.masonry('remove', nearest);
+			$grid.masonry('layout');
+			nearest.remove();
 
         }
     }
 
-	
+	// thing I found online
+
+	var GetUrlParameter = function GetUrlParameter(sParam) {
+		var sPageURL = window.location.search.substring(1),
+			sURLVariables = sPageURL.split('&'),
+			sParameterName,
+			i;
+
+		for (i = 0; i < sURLVariables.length; i++) {
+			sParameterName = sURLVariables[i].split('=');
+
+			if (sParameterName[0] === sParam) {
+				return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+			}
+		}
+		return false;
+	};
+
+
 	function FormatText(text) {
 
 		text = $('<div>').text(text).html();
@@ -165,23 +199,39 @@ $(document).ready(function() {
 		return text.replace(/\n/g, "<br>");
 	}
 
-	// another thing I found online
-	var GetUrlParameter = function GetUrlParameter(sParam) {
-		var sPageURL = window.location.search.substring(1),
-			sURLVariables = sPageURL.split('&'),
-			sParameterName,
-			i;
+	function UnformatText(html) {
+		var $container = $('<div>').html(html);
 
-		for (i = 0; i < sURLVariables.length; i++) {
-			sParameterName = sURLVariables[i].split('=');
+		$container.find('a[href^="/u/"]').each(function() {
+			var username = $(this).text();
+			$(this).replaceWith(username);
+		});
 
-			if (sParameterName[0] === sParam) {
-				return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
-			}
-		}
-		return false;
-	};
+		$container.find('a[href^="http"], a[href^="https"]').each(function() {
+			var url = $(this).attr('href');
+			var text = $(this).text();
+			$(this).replaceWith(`[url=${url}]${text}[/url]`);
+		});
 
+		$container.find('b, strong').each(function() {
+			var text = $(this).text();
+			$(this).replaceWith(`**${text}**`);
+		});
+
+		$container.find('i, em').each(function() {
+			var text = $(this).text();
+			$(this).replaceWith(`*${text}*`);
+		});
+
+		$container.find('s, strike, del').each(function() {
+			var text = $(this).text();
+			$(this).replaceWith(`*-${text}-*`);
+		});
+
+		$container.find('br').replaceWith('\n');
+
+		return $container.text();
+	}
 
 	// alert stuff (I wish I could have them in alert_handler but too pain in the as to figure out)
 
@@ -274,6 +324,7 @@ $(document).ready(function() {
 		isLoading = true;
 
 		console.log(`Fetching posts for page: ${page}`);
+		console.log($grid.data('masonry'));
 
 		$.ajax({
 			
@@ -286,10 +337,7 @@ $(document).ready(function() {
 			},
             
 			success: function(response) {
-				
-				if(response.status === "404") {
-					CreateNoResultsFound();
-				}
+
 
 				if (response.status === 'success' && response.data.posts.length > 0) {
 					
@@ -310,7 +358,6 @@ $(document).ready(function() {
 						var formattedDate = date.toLocaleDateString(undefined, options);
 
 						var postHtml = `
-                            <div class="col-md-4 col-sm-6 col-xs-12">
                                 <div class="post-card" id=${post.id}>
 
                                     <div class="post-header-top">
@@ -328,36 +375,33 @@ $(document).ready(function() {
                                     <div class="post-body">${FormatText(post.content)}</div>
                                     <img class="post-image" ${post.image_url ? `src="${post.image_url}"` : ''}>
 
+									${Array.isArray(post.comments) && post.comments.length > 0 ? `
 									<div class="comment-area">
-									
-										${post.comments && post.comments.length > 0
-											? post.comments
-												.slice()
-												.sort(function(a, b) {
-													return new Date(a.created_at) - new Date(b.created_at);
-												})
-												.map(comment => {
-													const commentDate = new Date(comment.created_at);
-													const commentFormattedDate = commentDate.toLocaleDateString(undefined, options);
-													return `
-														<div class="comment">
-															<img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${comment.username}" alt="${comment.username} profile picture" class="comment-pfp" />
-															<div class="comment-main">
-																<div class="comment-header">
-																	<strong class="comment-username">${comment.username}</strong> 
-																	<span class="comment-date">${commentFormattedDate}</span>
-																</div>
-																<div class="comment-body">
-																	${FormatText(comment.content)}
-																</div>
-															</div>
-														</div>
-													`;
-												}).join('')
-											: ''
+										${
+										post.comments
+											.slice()
+											.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+											.map(comment => {
+											const commentDate = new Date(comment.created_at);
+											const commentFormattedDate = commentDate.toLocaleDateString(undefined, options);
+											return `
+												<div class="comment">
+												<img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${comment.username}" alt="${comment.username} profile picture" class="comment-pfp" />
+												<div class="comment-main">
+													<div class="comment-header">
+													<strong class="comment-username">${comment.username}</strong>
+													<span class="comment-date">${commentFormattedDate}</span>
+													</div>
+													<div class="comment-body">
+													${FormatText(comment.content)}
+													</div>
+												</div>
+												</div>
+											`;
+											}).join('')
 										}
-										
 									</div>
+									` : ''}
 
 										<div class="comment-input-container" >
 											<textarea type="text" placeholder="Add a comment..." class="comment-input" spellcheck="false" data-gramm="false"></textarea>
@@ -370,9 +414,8 @@ $(document).ready(function() {
 											</div>
 
 										</div>
-						
+
                                 </div>
-                            </div>
 
                         `;
 
@@ -380,8 +423,6 @@ $(document).ready(function() {
                         if(GetCookie("username") === post.username) {
 
                             postHtml = `
-
-                                <div class="col-md-4 col-sm-6 col-xs-12">
                                     <div class="post-card" id=${post.id}>
 
                                         <div class="dropdown-post">
@@ -391,7 +432,7 @@ $(document).ready(function() {
                                                 <p class="dropdown-icon" data-toggle="dropdown">﹀</p>
 
                                                 <ul class="dropdown-menu" id="dropdown-menu-post">
-                                                    <li><a href="#">Edit post</a></li>
+                                                    <li><a class="edit-post" href="#">Edit post</a></li>
                                                     <li><a class="delete-post" href="#">Delete post</a></li>
                                                     <li><a href="#">Link to post</a></li>
                                                     <li><a href="#">Disable comments</a></li>
@@ -418,34 +459,33 @@ $(document).ready(function() {
 
 										<div class="comment-area">
 
-										${post.comments && post.comments.length > 0
-											? post.comments
+										${Array.isArray(post.comments) && post.comments.length > 0 ? `
+										<div class="comment-area">
+											${
+											post.comments
 												.slice()
-												.sort(function(a, b) {
-													return new Date(a.created_at) - new Date(b.created_at);
-												})
+												.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
 												.map(comment => {
-													const commentDate = new Date(comment.created_at);
-													const commentFormattedDate = commentDate.toLocaleDateString(undefined, options);
-													return `
-														<div class="comment">
-															<img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${comment.username}" alt="${comment.username} profile picture" class="comment-pfp" />
-															<div class="comment-main">
-																<div class="comment-header">
-																	<strong class="comment-username">${comment.username}</strong> 
-																	<span class="comment-date">${commentFormattedDate}</span>
-																</div>
-																<div class="comment-body">
-																	${FormatText(comment.content)}
-																</div>
-															</div>
+												const commentDate = new Date(comment.created_at);
+												const commentFormattedDate = commentDate.toLocaleDateString(undefined, options);
+												return `
+													<div class="comment">
+													<img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${comment.username}" alt="${comment.username} profile picture" class="comment-pfp" />
+													<div class="comment-main">
+														<div class="comment-header">
+														<strong class="comment-username">${comment.username}</strong>
+														<span class="comment-date">${commentFormattedDate}</span>
 														</div>
-													`;
+														<div class="comment-body">
+														${FormatText(comment.content)}
+														</div>
+													</div>
+													</div>
+												`;
 												}).join('')
-											: ''
-										}
-
+											}
 										</div>
+										` : ''}
 
 										<div class="comment-input-container" >
 											<textarea type="text" placeholder="Add a comment..." class="comment-input" spellcheck="false" data-gramm="false"></textarea>
@@ -460,13 +500,30 @@ $(document).ready(function() {
 										</div>
 
                                     </div>
-                                </div>
 
                             `;
 
                         };
+																
+						var $postHtml = $(postHtml);  
 
-						$('.row').append(postHtml);
+						$grid.append($postHtml);
+
+						var imgCount = $postHtml.find('img').length;
+
+						if (imgCount === 0) {
+							$postHtml.css('visibility', 'visible');
+							$grid.masonry('layout');
+						} else {
+							$postHtml.imagesLoaded().always(function () {
+								$postHtml.css('visibility', 'visible');
+								$grid.masonry('layout');
+							});
+						}
+
+						$grid.append($postHtml)
+							.masonry('appended', $postHtml);
+
 					});
 					
 		
@@ -497,7 +554,12 @@ $(document).ready(function() {
 
 	$(window).on('scroll', function(){
 		if( $(window).scrollTop() > $(document).height() - $(window).height() ) {	
+
+			$grid.masonry('layout');
+			$grid.css('visibility', 'visible');
+		
 			FetchPosts(currentPage);
+			
 		}
 	}).scroll();
 	
@@ -511,16 +573,22 @@ $(document).ready(function() {
 		const $container = $input.closest('.comment-input-container');
 		const $post = $input.closest('.post-card');
 
+
 		$input.stop(true, true).animate({
 			height: '60px',
 			width: '425px'
-		}, 200);
+		}, 200, function() {
+			$grid.masonry('layout');
+		});
 
 		$post.addClass('post-expanded');
 
 		$container.addClass('comment-container-expended');
 		$container.find('.comment-buttons').fadeIn(150);
 		$container.find('.submit-comment-pfp').css('display', 'block').fadeIn(150);;
+		
+		
+
 	});
 
 	$(document).on('click', '.submit-comment-button', function (e) { 
@@ -537,10 +605,20 @@ $(document).ready(function() {
 
 	// submiting commenting and comment stuff
 
-
 	function AddComment(username, content, date, postId) {
 		const $post = $(`.post-card[id="${postId}"]`);
-		const $commentArea = $post.find('.comment-area');
+		let $commentArea = $post.find('.comment-area');
+
+		if ($commentArea.length === 0) {
+			$commentArea = $('<div class="comment-area"></div>');
+
+			const $commentInputContainer = $post.find('.comment-input-container');
+			if ($commentInputContainer.length > 0) {
+				$commentInputContainer.before($commentArea);
+			} else {
+				$post.append($commentArea);
+			}
+		}
 
 		const safeContent = $('<div>').text(content).html();
 
@@ -553,7 +631,7 @@ $(document).ready(function() {
 						<span class="comment-date">${date}</span>
 					</div>
 					<div class="comment-body">
-						${safeContent}
+						${FormatText(safeContent)}
 					</div>
 				</div>
 			</div>
@@ -561,7 +639,6 @@ $(document).ready(function() {
 
 		$commentArea.append($newComment);
 	}
-
 
 	function SubmitComment(e) {
 
@@ -679,6 +756,86 @@ $(document).ready(function() {
 
 	});
 
+	$(document).on('click', '.edit-post', function(e) {
+		e.preventDefault();
+
+		var $postCard = $(this).closest('.post-card');
+		var $postBody = $postCard.find('.post-body');
+
+		if ($postBody.find('textarea').length) {
+			return; 
+		}
+
+		var originalHtml = $postBody.html();
+		var originalText = originalHtml
+			.replace(/<br\s*\/?>/gi, '\n')
+			.replace(/<\/div>\s*<div>/gi, '\n')
+			.replace(/<\/?div>/gi, '')
+			.trim();
+
+		var $textarea = $('<textarea>')
+			.addClass('edit-post-textarea')
+			.val(originalText)
+			.css({
+				width: '100%',
+				minHeight: '100px',
+				boxSizing: 'border-box',
+				fontFamily: 'inherit',
+				fontSize: 'inherit',
+				padding: '8px',
+			});
+
+		$postBody.empty().append($textarea);
+		$textarea.focus();
+	});
+
+	$(document).on('dblclick', '.edit-post-textarea', function() {
+		var $textarea = $(this);
+		var newContent = $textarea.val();
+
+		if (newContent.trim().length === 0) {
+			alert('Post content cannot be empty.');
+			return;
+		}
+
+		var $postCard = $textarea.closest('.post-card');
+		var postId = $postCard.attr('id');
+
+		var username = GetCookie('username');
+		var password = GetCookie('password');
+
+		console.log("Post Data: ", {
+			username: username,
+			password: password,
+			id: postId,
+		});
+
+		$.ajax({
+			url: '/api/v1/edit_post.php',
+			method: 'POST',
+			data: {
+				username: username,
+				password: password,
+				id: postId,
+				content: newContent
+			},
+			success: function(response) {
+				if (response.status === 'success') {
+					var safeText = $('<div>').text(newContent).html();
+					var formattedText = safeText.replace(/\n/g, '<br>');
+					$textarea.parent('.post-body').html(FormatText(formattedText));
+				} else {
+					ClearAlert();
+					SetAlert("Failed to edit your post, " + response.message, "danger");
+				}
+			},
+			error: function() {
+				ClearAlert();
+				SetAlert("Server error, Try again later!", "danger");
+			}
+		});
+	});
+
 	// end
 
 
@@ -696,7 +853,9 @@ $(document).ready(function() {
 		$input.stop(true, true).animate({
 			height: '30px',
 			width: '275px'
-		}, 200);
+		}, 200, function() {
+			$grid.masonry('layout');
+		});
 
 		$post.removeClass('post-expanded');
 		$container.removeClass('comment-container-expended'); // keep same typo if that's what rest of code expects
@@ -724,7 +883,6 @@ $(document).ready(function() {
 			var formattedDate = date.toLocaleDateString(undefined, options);
 	
 			var postHtml = `
-				<div class="col-md-4 col-sm-6 col-xs-12">
 					<div class="post-card" id="${response.data.id}">
 
 						<div class="dropdown-post">
@@ -734,7 +892,7 @@ $(document).ready(function() {
 								<p class="dropdown-icon" data-toggle="dropdown">﹀</p>
 
 								<ul class="dropdown-menu" id="dropdown-menu-post">
-									<li><a href="#">Edit post</a></li>
+									<li><a class="edit-post" href="#">Edit post</a></li>
 									<li><a class="delete-post" href="#">Delete post</a></li>
 									<li><a href="#">Link to post</a></li>
 									<li><a href="#">Disable comments</a></li>
@@ -757,36 +915,33 @@ $(document).ready(function() {
 						<div class="post-body">${FormatText(response.data.content)}</div>
 						<img class="post-image" ${response.data.image_url ? `src="${response.data.image_url}"` : ''}>
 						
-						<div class="comment-area">
-						
-							${response.comments && response.comments.length > 0
-								? post.comments
-									.slice()
-									.sort(function(a, b) {
-										return new Date(a.created_at) - new Date(b.created_at);
-									})
-									.map(comment => {
-										const commentDate = new Date(comment.created_at);
-										const commentFormattedDate = commentDate.toLocaleDateString(undefined, options);
-										return `
-											<div class="comment">
-												<img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${comment.username}" alt="${comment.username} profile picture" class="comment-pfp" />
-												<div class="comment-main">
-													<div class="comment-header">
-														<strong class="comment-username">${comment.username}</strong> 
-														<span class="comment-date">${commentFormattedDate}</span>
-													</div>
-													<div class="comment-body">
-														${FormatText(comment.content)}
+						${response.comments && response.comments.length > 0 ? `
+							<div class="comment-area">
+								${
+									post.comments
+										.slice()
+										.sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+										.map(comment => {
+											const commentDate = new Date(comment.created_at);
+											const commentFormattedDate = commentDate.toLocaleDateString(undefined, options);
+											return `
+												<div class="comment">
+													<img src="${siteUrl}/api/v1/fetch_profile_picture.php?username=${comment.username}" alt="${comment.username} profile picture" class="comment-pfp" />
+													<div class="comment-main">
+														<div class="comment-header">
+															<strong class="comment-username">${comment.username}</strong> 
+															<span class="comment-date">${commentFormattedDate}</span>
+														</div>
+														<div class="comment-body">
+															${FormatText(comment.content)}
+														</div>
 													</div>
 												</div>
-											</div>
-										`;
-									}).join('')
-								: ''
-							}
-							
-						</div>
+											`;
+										}).join('')
+								}
+							</div>
+						` : ''}
 
 						<div class="comment-input-container" >
 							<textarea type="text" placeholder="Add a comment..." class="comment-input" spellcheck="false" data-gramm="false"></textarea>
@@ -799,14 +954,32 @@ $(document).ready(function() {
 							</div>
 
 						</div>
-
+						
 					</div>
-					
-				</div>
 			`;
 		}
 
-        $('.row').prepend(postHtml);
+		var $postHtml = $(postHtml);
+
+		$grid.prepend($postHtml);
+
+		var postImages = $postHtml.find('.post-image').filter(function() {
+			return $(this).attr('src') && $(this).attr('src').length > 0;
+		});
+
+		if (postImages.length === 0) {
+
+			$postHtml.css('visibility', 'visible');
+			$grid.masonry('prepended', $postHtml);
+			$grid.masonry('layout');
+		} else {
+
+			postImages.imagesLoaded().always(function () {
+				$postHtml.css('visibility', 'visible');
+				$grid.masonry('prepended', $postHtml);
+				$grid.masonry('layout');
+			});
+		}
 
         $('#post-content').val('');
 
@@ -814,8 +987,7 @@ $(document).ready(function() {
 
         $('#write-post-expanded').fadeOut(function() {
 
-			var writePostCard = $(
-				'<div class="col-md-4 col-sm-6 col-xs-12">' +
+			var $writePostCard = $(
 				  '<div class="write-post-card" id="write-post-card">' +
 			  
 					'<textarea id="post-text-area">Share what\'s new...</textarea>' +
@@ -838,27 +1010,29 @@ $(document).ready(function() {
 			  
 					'</div>' + 
 			  
-				  '</div>' + 
-			  
 				'</div>' 
 			);
 			  
+			$grid.prepend($writePostCard);
 
-            $('.row').prepend(writePostCard);
+			$grid.masonry('prepended', $writePostCard);
+			$grid.masonry('layout');
 
-            writePostCard.fadeIn();
+            $writePostCard .fadeIn();
 
-            writePostCard.find('#write-post-card').on('click', function() {
+            $writePostCard .on('click', function() {
 
-                $(this).closest('.col-md-4').fadeOut(function() {
+                $(this).closest('.write-post-card').fadeOut(300, function() {
 
                     $(this).remove();
 
                     $('#write-post-expanded').fadeIn();
+					
                 });
 
                 $('#write-post-expanded').css('display', 'block');
             });
+			
         });
 
     }
@@ -870,7 +1044,7 @@ $(document).ready(function() {
 	$('#write-post-card').on('click', function() {
 		
 
-		$(this).closest('.col-md-4').fadeOut(300, function() {
+		$(this).closest('.write-post-card').fadeOut(300, function() {
 
 			$(this).remove();
 
@@ -954,7 +1128,16 @@ $(document).ready(function() {
 
 		var imageFile = $('#image-upload')[0].files[0];
 
-		let validTypes = ['image/jpeg', 'image/pjpeg', 'image/png', 'image/gif', 'image/webp'];
+		let validTypes = [
+			'image/jpeg',
+			'image/pjpeg',
+			'image/png',
+			'image/gif',
+			'image/webp',
+			'image/avif',
+			'image/heic',
+			'image/heif'
+		];
 
 		if (imageFile) {
 
@@ -962,7 +1145,7 @@ $(document).ready(function() {
 				SetAlert('There was an upload error. \nMake sure to upload a JPG, GIF, WEBP, or PNG file and try again. \\dDismiss\\de', 'warning');
 				return;
 			}
-
+			
 			formData.append('image', imageFile);
 		}
 

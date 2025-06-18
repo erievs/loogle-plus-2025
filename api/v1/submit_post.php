@@ -139,25 +139,100 @@ class PostAPI
         }
 
         $file = $_FILES['image'];
-        $fileName = uniqid() . '_' . bin2hex(random_bytes(5)) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
-
+        $originalExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
         $targetDirectory = '../../assets/user_images/';
-        $targetFile = $targetDirectory . $fileName;
+        $siteUrl = "http://" . $_SERVER['HTTP_HOST'];
 
-        $validExtensions = ['jpg', 'jpeg', 'png', 'gif'];
-        $fileExtension = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-
-        if (!in_array($fileExtension, $validExtensions)) {
+        $validExtensions = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'heic', 'heif', 'avif'];
+        if (!in_array($originalExtension, $validExtensions)) {
             return null;
         }
 
-        $siteUrl = "http://" . $_SERVER['HTTP_HOST'];  
+        $generateFileName = function($ext) {
+            return uniqid() . '_' . bin2hex(random_bytes(5)) . '.' . $ext;
+        };
+
+        // we we have to convert some formats, webps as well since some browsers have issues
+        // and they're annoying to save
+        // jpegs are fine, and gifs cannot really be converted 
+
+        $savePngAndReturnUrl = function($img) use ($targetDirectory, $siteUrl) {
+            $pngName = uniqid() . '_' . bin2hex(random_bytes(5)) . '.png';
+            $pngPath = $targetDirectory . $pngName;
+            if (imagepng($img, $pngPath)) {
+                imagedestroy($img);
+                return $siteUrl . '/assets/user_images/' . $pngName;
+            } else {
+                error_log("Failed to save PNG file at $pngPath");
+                imagedestroy($img);
+                return null;
+            }
+        };
         
-        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
-            return $siteUrl . '/assets//user_images/' . $fileName;
+        if ($originalExtension === 'webp') {
+            if (function_exists('imagecreatefromwebp')) {
+                $img = imagecreatefromwebp($file['tmp_name']);
+                if ($img) {
+                    return $savePngAndReturnUrl($img);
+                } else {
+                    error_log("Failed to create image resource from WebP file: " . $file['tmp_name']);
+                    return null;
+                }
+            } else {
+                error_log("Function imagecreatefromwebp does not exist. Cannot convert WebP.");
+                return null;
+            }
         }
-        
-        return null;
+
+        if ($originalExtension === 'avif') {
+            if (function_exists('imagecreatefromavif')) {
+                $img = imagecreatefromavif($file['tmp_name']);
+                if ($img) {
+                    return $savePngAndReturnUrl($img);
+                } else {
+                    error_log("Failed to create image resource from AVIF file: " . $file['tmp_name']);
+                    return null;
+                }
+            } else {
+                error_log("Function imagecreatefromavif does not exist. Cannot convert AVIF.");
+                return null;
+            }
+        }
+
+        if ($originalExtension === 'heic' || $originalExtension === 'heif') {
+            if (class_exists('Imagick')) {
+                try {
+                    $imagick = new Imagick($file['tmp_name']);
+                    $imagick->setImageFormat('png');
+                    $pngName = $generateFileName('png');
+                    $pngPath = $targetDirectory . $pngName;
+                    if ($imagick->writeImage($pngPath)) {
+                        $imagick->clear();
+                        $imagick->destroy();
+                        return $siteUrl . '/assets/user_images/' . $pngName;
+                    } else {
+                        error_log("Failed to save PNG from HEIC using Imagick.");
+                        return null;
+                    }
+                } catch (Exception $e) {
+                    error_log("Imagick error converting HEIC: " . $e->getMessage());
+                    return null;
+                }
+            } else {
+                error_log("Imagick class not available - cannot convert HEIC/HEIF.");
+                return null;
+            }
+        }
+
+        $fileName = $generateFileName($originalExtension);
+        $targetFile = $targetDirectory . $fileName;
+
+        if (move_uploaded_file($file['tmp_name'], $targetFile)) {
+            return $siteUrl . '/assets/user_images/' . $fileName;
+        } else {
+            error_log("Failed to move uploaded file to $targetFile");
+            return null;
+        }
     }
 
     private function response(string $status, string $message, array $data = []): array
